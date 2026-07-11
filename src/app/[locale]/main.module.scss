@@ -1,0 +1,265 @@
+@use 'variable' as *;
+
+.separator {
+  border: none;
+  border-top: 1px solid $gray;
+  margin: 0;
+}
+
+.hero {
+  text-align: center;
+  padding: 6rem 1.5rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.badge {
+  display: inline-flex;
+  font-family: var(--font-mono);
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 2rem;
+  border: 1px solid $gold;
+  border-radius: 999px;
+  background: rgba(210, 159, 34, 0.05);
+  margin-bottom: 2rem;
+  color: $gold;
+}
+
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $gold;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: 3.75rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.heroGold {
+  color: $gold;
+}
+
+.heroSubtitle {
+  color: $muted;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: $gold;
+  color: $black;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: opacity 0.2s, transform 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.85;
+    transform: translateY(-3px);
+  }
+
+  &:active {
+    transform: translateY(2px);
+    transition: transform 0.1s;
+  }
+}
+
+.btnSecondary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border: 1px solid $gold;
+  color: $white;
+  font-weight: 600;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: transparent;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background: $gray;
+    transform: translateY(-3px);
+  }
+
+  &:active {
+    transform: translateY(2px);
+    transition: transform 0.1s;
+  }
+}
+
+.section {
+  padding: 4rem 1.5rem;
+  background: $black;
+}
+
+.sectionInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.categoryIcon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 0.5rem;
+  background: rgba(210, 159, 34, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  text-align: center;
+  background: $card;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: $gold;
+  }
+}
+
+.categoryName {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.categoryCount {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: $muted;
+}
+
+.productsGrid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.productCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  background: $card;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: $gold;
+  }
+}
+
+.productBadge {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: $gold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid $gold;
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+}
+
+.productName {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.specsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: auto;
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.specLabel {
+  color: $muted;
+}
+
+.specValue {
+  color: $white;
+}
+
+.productFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid $gray;
+}
+
+.productPrice {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $gold;
+}
+
+.btnAdd {
+  padding: 0.5rem 1rem;
+  background: $gold;
+  color: $black;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "catalog": "Каталог",
+    "builds": "Сборки",
+    "compare": "Сравнение"
+  },
+  "hero": {
+    "badge": "Комплектующие с доставкой по всей России",
+    "title": "Собери свой",
+    "titleGold": "идеальный ПК",
+    "subtitle": "Широкий выбор комплектующих от ведущих производителей. Собери, сравни и закажи сборку своей мечты.",
+    "ctaCatalog": "Перейти в каталог",
+    "ctaBuilds": "Готовые сборки"
+  },
+  "categories": {
+    "title": "Категории",
+    "processors": "Процессоры",
+    "videoCards": "Видеокарты",
+    "motherboards": "Материнские платы",
+    "ram": "ОЗУ",
+    "storage": "Накопители",
+    "powerSupplies": "Блоки питания",
+    "cases": "Корпуса",
+    "items": "{count} товаров"
+  },
+  "products": {
+    "title": "Популярные товары",
+    "addToCart": "В корзину"
+  },
+  "specs": {
+    "cores": "Ядер",
+    "threads": "Потоков",
+    "baseFreq": "Базовая частота",
+    "l3Cache": "L3 кэш",
+    "memory": "Память",
+    "boostClock": "Boost частота",
+    "cudaCores": "Ядер CUDA",
+    "tdp": "TDP",
+    "maxFreq": "Макс. частота",
+    "type": "Тип",
+    "capacity": "Объём",
+    "latency": "Задержка",
+    "voltage": "Напряжение",
+    "interface": "Интерфейс",
+    "readSpeed": "Чтение",
+    "writeSpeed": "Запись",
+    "socket": "Сокет",
+    "chipset": "Чипсет",
+    "ramSlots": "ОЗУ",
+    "wifi": "Wi-Fi"
+  },
+  "footer": {
+    "copyright": "© 2026 PC parts",
+    "description": "Магазин компьютерных комплектующих"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "catalog": "Catalog",
+    "builds": "Builds",
+    "compare": "Compare"
+  },
+  "hero": {
+    "badge": "Components with delivery across Russia",
+    "title": "Build your",
+    "titleGold": "perfect PC",
+    "subtitle": "Wide selection of components from leading manufacturers. Build, compare and order your dream build.",
+    "ctaCatalog": "Go to catalog",
+    "ctaBuilds": "Pre-built builds"
+  },
+  "categories": {
+    "title": "Categories",
+    "processors": "Processors",
+    "videoCards": "Video Cards",
+    "motherboards": "Motherboards",
+    "ram": "RAM",
+    "storage": "Storage",
+    "powerSupplies": "Power Supplies",
+    "cases": "Cases",
+    "items": "{count} items"
+  },
+  "products": {
+    "title": "Popular Products",
+    "addToCart": "Add to cart"
+  },
+  "specs": {
+    "cores": "Cores",
+    "threads": "Threads",
+    "baseFreq": "Base freq",
+    "l3Cache": "L3 cache",
+    "memory": "Memory",
+    "boostClock": "Boost clock",
+    "cudaCores": "CUDA cores",
+    "tdp": "TDP",
+    "maxFreq": "Max freq",
+    "type": "Type",
+    "capacity": "Capacity",
+    "latency": "Latency",
+    "voltage": "Voltage",
+    "interface": "Interface",
+    "readSpeed": "Read speed",
+    "writeSpeed": "Write speed",
+    "socket": "Socket",
+    "chipset": "Chipset",
+    "ramSlots": "RAM",
+    "wifi": "Wi-Fi"
+  },
+  "footer": {
+    "copyright": "© 2026 PC parts",
+    "description": "Computer Components Store"
+  }
+}
