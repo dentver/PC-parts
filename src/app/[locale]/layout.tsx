@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { Unbounded, Rubik, JetBrains_Mono } from 'next/font/google'
 import Link from 'next/link'
+import fs from 'fs'
+import path from 'path'
 import { routing } from '@/i18n/routing'
 import { LanguageSwitch } from './language-switch'
 import './globals.scss'
@@ -75,13 +77,9 @@ export default async function LocaleLayout({
                 <Link href={`/${locale}/compare`}>{tnav('compare')}</Link>
               </nav>
               <LanguageSwitch locale={locale} />
-              <Link href={`/${locale}/cart`} className="cart-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                </svg>
-              </Link>
+              <Link href={`/${locale}/cart`} className="cart-link" dangerouslySetInnerHTML={{
+                __html: fs.readFileSync(path.join(process.cwd(), 'public', 'icons', 'cart.svg'), 'utf-8'),
+              }} />
             </div>
           </header>
 

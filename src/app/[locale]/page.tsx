@@ -88,115 +88,17 @@ function gridColumns(count: number): number {
   return 4
 }
 
+import fs from 'fs'
+import path from 'path'
+
 function CategoryIcon({ categoryKey }: { categoryKey: string }) {
-  const svg = (() => {
-    switch (categoryKey) {
-      case 'processors':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="6" y="6" width="12" height="12" rx="1.5" />
-            <line x1="9" y1="3" x2="9" y2="6" />
-            <line x1="12" y1="3" x2="12" y2="6" />
-            <line x1="15" y1="3" x2="15" y2="6" />
-            <line x1="9" y1="18" x2="9" y2="21" />
-            <line x1="12" y1="18" x2="12" y2="21" />
-            <line x1="15" y1="18" x2="15" y2="21" />
-            <line x1="3" y1="9" x2="6" y2="9" />
-            <line x1="3" y1="12" x2="6" y2="12" />
-            <line x1="3" y1="15" x2="6" y2="15" />
-            <line x1="18" y1="9" x2="21" y2="9" />
-            <line x1="18" y1="12" x2="21" y2="12" />
-            <line x1="18" y1="15" x2="21" y2="15" />
-          </svg>
-        )
-      case 'videoCards':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="7" width="18" height="12" rx="1.5" />
-            <rect x="5" y="9" width="8" height="6" rx="1" />
-            <line x1="16" y1="10" x2="18" y2="10" />
-            <line x1="16" y1="12" x2="18" y2="12" />
-            <line x1="16" y1="14" x2="18" y2="14" />
-            <line x1="10" y1="19" x2="10" y2="21" />
-            <line x1="12" y1="19" x2="12" y2="21" />
-          </svg>
-        )
-      case 'motherboards':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="1.5" />
-            <rect x="6" y="6" width="6" height="6" rx="1" />
-            <line x1="15" y1="6" x2="18" y2="6" />
-            <line x1="15" y1="9" x2="18" y2="9" />
-            <line x1="6" y1="15" x2="12" y2="15" />
-            <line x1="6" y1="18" x2="12" y2="18" />
-            <line x1="15" y1="15" x2="18" y2="15" />
-            <line x1="15" y1="18" x2="18" y2="18" />
-          </svg>
-        )
-      case 'ram':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="5" width="16" height="14" rx="2" />
-            <line x1="7" y1="3" x2="7" y2="5" />
-            <line x1="10" y1="3" x2="10" y2="5" />
-            <line x1="13" y1="3" x2="13" y2="5" />
-            <line x1="16" y1="3" x2="16" y2="5" />
-            <line x1="7" y1="19" x2="7" y2="21" />
-            <line x1="10" y1="19" x2="10" y2="21" />
-            <line x1="13" y1="19" x2="13" y2="21" />
-            <line x1="16" y1="19" x2="16" y2="21" />
-            <line x1="6" y1="10" x2="18" y2="10" />
-            <line x1="6" y1="14" x2="18" y2="14" />
-          </svg>
-        )
-      case 'storage':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="3" width="16" height="18" rx="2" />
-            <circle cx="8" cy="8" r="1.5" fill="#d29f22" />
-            <line x1="12" y1="6" x2="18" y2="6" />
-            <line x1="12" y1="9" x2="18" y2="9" />
-            <line x1="6" y1="14" x2="18" y2="14" />
-            <line x1="6" y1="17" x2="18" y2="17" />
-          </svg>
-        )
-      case 'powerSupplies':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="4" width="16" height="16" rx="2" />
-            <circle cx="12" cy="12" r="3" />
-            <line x1="12" y1="7" x2="12" y2="5" />
-            <line x1="12" y1="19" x2="12" y2="17" />
-            <line x1="7" y1="12" x2="5" y2="12" />
-            <line x1="19" y1="12" x2="17" y2="12" />
-            <line x1="9" y1="12" x2="15" y2="12" />
-            <line x1="12" y1="9" x2="12" y2="15" />
-          </svg>
-        )
-      case 'cases':
-        return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="#d29f22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="5" y="3" width="14" height="18" rx="1.5" />
-            <rect x="8" y="6" width="8" height="4" rx="0.5" />
-            <line x1="8" y1="14" x2="16" y2="14" />
-            <line x1="8" y1="17" x2="16" y2="17" />
-            <line x1="12" y1="6" x2="12" y2="10" />
-            <line x1="9" y1="3" x2="9" y2="6" />
-            <line x1="15" y1="3" x2="15" y2="6" />
-            <line x1="10" y1="20" x2="10" y2="21" />
-            <line x1="14" y1="20" x2="14" y2="21" />
-          </svg>
-        )
-      default:
-        return null
-    }
-  })()
+  const svgContent = fs.readFileSync(
+    path.join(process.cwd(), 'public', 'icons', `${categoryKey}.svg`),
+    'utf-8'
+  )
 
   return (
-    <div className={styles.categoryIcon}>
-      {svg}
-    </div>
+    <div className={styles.categoryIcon} dangerouslySetInnerHTML={{ __html: svgContent }} />
   )
 }
 
