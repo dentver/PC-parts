@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl'
 import styles from './main.module.scss'
+import { HeroDots } from '@/components/hero-dots'
 
 interface Spec {
   labelKey: string
@@ -109,17 +110,20 @@ export default function Home() {
   return (
     <>
       <section className={styles.hero}>
-        <span className={styles.badge}>
-          <span className={styles.badgeDot} />
-          {t('hero.badge')}
-        </span>
-        <h1 className={styles.heroTitle}>{t('hero.title')} <br /><span className={styles.heroGold}>{t('hero.titleGold')}</span></h1>
-        <p className={styles.heroSubtitle}>
-          {t('hero.subtitle')}
-        </p>
-        <div className={styles.heroActions}>
-          <a href="/catalog" className={styles.btnPrimary}>{t('hero.ctaCatalog')}</a>
-          <a href="/builds" className={styles.btnSecondary}>{t('hero.ctaBuilds')}</a>
+        <HeroDots />
+        <div className={styles.heroInner}>
+          <span className={styles.badge}>
+            <span className={styles.badgeDot} />
+            {t('hero.badge')}
+          </span>
+          <h1 className={styles.heroTitle}>{t('hero.title')} <br /><span className={styles.heroGold}>{t('hero.titleGold')}</span></h1>
+          <p className={styles.heroSubtitle}>
+            {t('hero.subtitle')}
+          </p>
+          <div className={styles.heroActions}>
+            <a href="/catalog" className={styles.btnPrimary}>{t('hero.ctaCatalog')}</a>
+            <a href="/builds" className={styles.btnSecondary}>{t('hero.ctaBuilds')}</a>
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,23 @@
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.55; }
+}
+
+.wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout style paint;
+}
+
+.dot {
+  position: absolute;
+  width: 2.4px;
+  height: 2.4px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  will-change: opacity;
+  animation: twinkle ease-in-out infinite;
+}

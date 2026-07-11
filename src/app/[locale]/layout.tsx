@@ -63,7 +63,7 @@ export default async function LocaleLayout({
   const tfooter = await getTranslations({ locale, namespace: 'footer' })
 
   return (
-    <html lang={locale} className={`${unbounded.variable} ${rubik.variable} ${jetbrainsMono.variable}`}>
+    <html lang={locale} className={`${unbounded.variable} ${rubik.variable} ${jetbrainsMono.variable}`} translate="no">
       <body>
         <NextIntlClientProvider messages={messages}>
           <header className="header">
