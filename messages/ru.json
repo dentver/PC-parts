@@ -25,7 +25,8 @@
   },
   "products": {
     "title": "Популярные товары",
-    "addToCart": "В корзину"
+    "addToCart": "В корзину",
+    "empty": "Популярных товаров пока нет"
   },
   "specs": {
     "cores": "Ядер",
@@ -47,7 +48,40 @@
     "socket": "Сокет",
     "chipset": "Чипсет",
     "ramSlots": "ОЗУ",
-    "wifi": "Wi-Fi"
+    "wifi": "Wi-Fi",
+    "wattage": "Мощность",
+    "formFactor": "Форм-фактор",
+    "modular": "Модульность",
+    "efficiency": "Эффективность",
+    "motherboardSupport": "Поддержка плат",
+    "fanSupport": "Вентиляторы",
+    "driveBays": "Отсеки для накопителей"
+  },
+  "catalog": {
+    "title": "Каталог",
+    "all": "Все",
+    "found": "Найдено {count} товаров",
+    "sortDefault": "По умолчанию",
+    "sortPriceAsc": "Цена: по возрастанию",
+    "sortPriceDesc": "Цена: по убыванию",
+    "addToCart": "В корзину",
+    "inCart": "В корзине",
+    "empty": "Товары не найдены",
+    "connecting": "Подключение к серверу...",
+    "allLoaded": "Все товары загружены"
+  },
+  "cart": {
+    "title": "Корзина",
+    "count": "{count} товара",
+    "empty": "Корзина пуста",
+    "summary": "Итого заказа",
+    "subtotal": "Сумма",
+    "shipping": "Доставка",
+    "shippingFree": "Бесплатно",
+    "total": "Итого",
+    "checkout": "Оформить заказ",
+    "continueShopping": "Продолжить покупки",
+    "remove": "Удалить"
   },
   "footer": {
     "copyright": "© 2026 PC parts",

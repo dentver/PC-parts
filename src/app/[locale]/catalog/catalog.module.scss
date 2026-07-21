@@ -1,0 +1,228 @@
+@use '../variable' as *;
+
+.page {
+  padding: 2rem 1.5rem 4rem;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: $muted;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.categoryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid $gray;
+  border-radius: 999px;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+
+  &:not(.pillActive):hover {
+    border-color: $gold;
+    color: $gold;
+  }
+}
+
+.pillActive {
+  background: $gold;
+  color: $black;
+  border-color: $gold;
+  font-weight: 600;
+}
+
+.sortSelect {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  background: $card;
+  color: $white;
+  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    border-color: $gold;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  background: $card;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: $gold;
+  }
+}
+
+.badge {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: $gold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid $gold;
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+}
+
+.name {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: auto;
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.specLabel {
+  color: $muted;
+}
+
+.specValue {
+  color: $white;
+  white-space: nowrap;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid $gray;
+}
+
+.price {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $gold;
+}
+
+.btnAdd {
+  padding: 0.5rem 1rem;
+  background: $gold;
+  color: $black;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.empty {
+  text-align: center;
+  color: $muted;
+  font-family: var(--font-mono);
+  padding: 4rem 1rem;
+}
+
+.connecting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+
+  p {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: $muted;
+  }
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid $gray;
+  border-top-color: $gold;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.end {
+  text-align: center;
+  color: $muted;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 1rem;
+  opacity: 0.6;
+}
+
+.trigger {
+  height: 1px;
+}

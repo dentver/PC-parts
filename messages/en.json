@@ -25,7 +25,8 @@
   },
   "products": {
     "title": "Popular Products",
-    "addToCart": "Add to cart"
+    "addToCart": "Add to cart",
+    "empty": "No popular products yet"
   },
   "specs": {
     "cores": "Cores",
@@ -47,7 +48,40 @@
     "socket": "Socket",
     "chipset": "Chipset",
     "ramSlots": "RAM",
-    "wifi": "Wi-Fi"
+    "wifi": "Wi-Fi",
+    "wattage": "Wattage",
+    "formFactor": "Form factor",
+    "modular": "Modular",
+    "efficiency": "Efficiency",
+    "motherboardSupport": "Motherboard support",
+    "fanSupport": "Fans",
+    "driveBays": "Drive bays"
+  },
+  "catalog": {
+    "title": "Catalog",
+    "all": "All",
+    "found": "Found {count} items",
+    "sortDefault": "By default",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "addToCart": "Add to cart",
+    "inCart": "In cart",
+    "empty": "No products found",
+    "connecting": "Connecting to server...",
+    "allLoaded": "All products loaded"
+  },
+  "cart": {
+    "title": "Cart",
+    "count": "{count} items",
+    "empty": "Your cart is empty",
+    "summary": "Order summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shippingFree": "Free",
+    "total": "Total",
+    "checkout": "Proceed to checkout",
+    "continueShopping": "Continue shopping",
+    "remove": "Remove"
   },
   "footer": {
     "copyright": "© 2026 PC parts",

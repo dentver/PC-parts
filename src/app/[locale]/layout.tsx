@@ -7,6 +7,9 @@ import fs from 'fs'
 import path from 'path'
 import { routing } from '@/i18n/routing'
 import { LanguageSwitch } from './language-switch'
+import { CartProvider } from '@/context/cart-context'
+import { CartLink } from '@/components/cart-link'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import './globals.scss'
 import './variable.scss'
 
@@ -66,30 +69,31 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${unbounded.variable} ${rubik.variable} ${jetbrainsMono.variable}`} translate="no">
       <body>
         <NextIntlClientProvider messages={messages}>
-          <header className="header">
-            <div className="header-inner">
-              <Link href={`/${locale}`} className="logo">
-                PC Parts
-              </Link>
-              <nav className="nav">
-                <Link href={`/${locale}/catalog`}>{tnav('catalog')}</Link>
-                <Link href={`/${locale}/builds`}>{tnav('builds')}</Link>
-                <Link href={`/${locale}/compare`}>{tnav('compare')}</Link>
-              </nav>
-              <LanguageSwitch locale={locale} />
-              <Link href={`/${locale}/cart`} className="cart-link" dangerouslySetInnerHTML={{
-                __html: fs.readFileSync(path.join(process.cwd(), 'public', 'icons', 'cart.svg'), 'utf-8'),
-              }} />
-            </div>
-          </header>
+          <CartProvider>
+            <header className="header">
+              <div className="header-inner">
+                <Link href={`/${locale}`} className="logo">
+                  PC Parts
+                </Link>
+                <nav className="nav">
+                  <Link href={`/${locale}/catalog`}>{tnav('catalog')}</Link>
+                  <Link href={`/${locale}/builds`}>{tnav('builds')}</Link>
+                  <Link href={`/${locale}/compare`}>{tnav('compare')}</Link>
+                </nav>
+                <LanguageSwitch locale={locale} />
+                <CartLink svgContent={fs.readFileSync(path.join(process.cwd(), 'public', 'icons', 'cart.svg'), 'utf-8')} />
+              </div>
+            </header>
 
-          <main className="main-content">
-            {children}
-          </main>
+            <main className="main-content">
+              {children}
+            </main>
+          </CartProvider>
 
           <footer className="footer">
             <p>{tfooter('copyright')} — {tfooter('description')}</p>
           </footer>
+          <ScrollToTop />
         </NextIntlClientProvider>
       </body>
     </html>
