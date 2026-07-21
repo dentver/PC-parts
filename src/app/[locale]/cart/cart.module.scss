@@ -76,6 +76,38 @@
   font-weight: 600;
 }
 
+.componentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0;
+}
+
+.componentRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.componentRole {
+  color: $gold;
+  white-space: nowrap;
+}
+
+.componentName {
+  color: $white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.componentPrice {
+  color: $muted;
+  white-space: nowrap;
+}
+
 .itemFooter {
   display: flex;
   align-items: center;

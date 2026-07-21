@@ -12,6 +12,9 @@ export function CartClient() {
   const locale = params.locale as string
   const { items, removeItem, updateQuantity, totalItems, totalPrice } = useCart()
 
+  const regularItems = items.filter(i => i.categoryKey !== 'builds')
+  const buildItems = items.filter(i => i.categoryKey === 'builds')
+
   return (
     <section className={styles.page}>
       <div className={styles.inner}>
@@ -33,7 +36,35 @@ export function CartClient() {
         ) : (
           <div className={styles.layout}>
             <div className={styles.items}>
-              {items.map((item) => (
+              {buildItems.map((item) => (
+                <div key={item.id} className={styles.item}>
+                  <span className={styles.badge}>{t('categories.builds')}</span>
+                  <h3 className={styles.itemName}>{item.name}</h3>
+                  {item.components && item.components.length > 0 && (
+                    <div className={styles.componentsList}>
+                      {item.components.map(c => (
+                        <div key={c.id} className={styles.componentRow}>
+                          <span className={styles.componentRole}>{t(`buildRoles.${c.role}`)}</span>
+                          <span className={styles.componentName}>{c.name}</span>
+                          <span className={styles.componentPrice}>{new Intl.NumberFormat('ru-RU').format(c.price)} ₽</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className={styles.itemFooter}>
+                    <span className={styles.itemPrice}>
+                      {new Intl.NumberFormat('ru-RU').format(item.price)} ₽
+                    </span>
+                    <div className={styles.quantity}>
+                      <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
+                      <span className={styles.qtyValue}>{item.quantity}</span>
+                      <button className={styles.qtyBtn} onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                    </div>
+                    <button className={styles.removeBtn} onClick={() => removeItem(item.id)}>{t('cart.remove')}</button>
+                  </div>
+                </div>
+              ))}
+              {regularItems.map((item) => (
                 <div key={item.id} className={styles.item}>
                   <span className={styles.badge}>{t(`categories.${item.categoryKey}`)}</span>
                   <h3 className={styles.itemName}>{item.name}</h3>

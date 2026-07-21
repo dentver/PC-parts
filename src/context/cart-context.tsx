@@ -2,12 +2,21 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 
+export interface CartComponent {
+  id: number
+  name: string
+  categoryKey: string
+  price: number
+  role: string
+}
+
 export interface CartItem {
   id: number
   name: string
   categoryKey: string
   price: number
   quantity: number
+  components?: CartComponent[]
 }
 
 interface CartContextValue {

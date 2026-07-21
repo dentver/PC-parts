@@ -1,0 +1,226 @@
+@use '../variable' as *;
+
+.page {
+  padding: 2rem 1.5rem 4rem;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  background: $card;
+  transition: border-color 0.2s;
+  flex: 0 1 340px;
+
+  &:hover {
+    border-color: $gold;
+  }
+}
+
+.buildName {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.buildDesc {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: $muted;
+  margin: 0;
+}
+
+.componentsPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.componentRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  gap: 1rem;
+}
+
+.role {
+  color: $gold;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.partName {
+  color: $white;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid $gray;
+  margin-top: auto;
+}
+
+.total {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $gold;
+}
+
+.detailsBtn {
+  padding: 0.5rem 1rem;
+  background: $gold;
+  color: $black;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// ─── Overlay / Modal ──────────────────────────────────────
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.modal {
+  background: $black;
+  border: 1px solid $gray;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 900px;
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.modalTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.closeBtn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  background: transparent;
+  border: 1px solid $gray;
+  border-radius: 6px;
+  color: $muted;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: $gold;
+    color: $gold;
+  }
+}
+
+.modalDesc {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: $muted;
+  margin-bottom: 1.5rem;
+}
+
+.modalComponents {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.modalTotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid $gray;
+}
+
+.addAllBtn {
+  padding: 0.7rem 1.5rem;
+  background: $gold;
+  color: $black;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.spinnerWrap {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid $gray;
+  border-top-color: $gold;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

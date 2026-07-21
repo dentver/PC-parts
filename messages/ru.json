@@ -21,6 +21,7 @@
     "storage": "Накопители",
     "powerSupplies": "Блоки питания",
     "cases": "Корпуса",
+    "builds": "Готовые сборки",
     "items": "{count} товаров"
   },
   "products": {
@@ -82,6 +83,33 @@
     "checkout": "Оформить заказ",
     "continueShopping": "Продолжить покупки",
     "remove": "Удалить"
+  },
+  "builds": {
+    "title": "Готовые сборки",
+    "startline": "StartLine",
+    "startlineDesc": "Бюджетная сборка для повседневных задач",
+    "optima": "Optima",
+    "optimaDesc": "Сбалансированная сборка среднего сегмента",
+    "gameforce": "GameForce",
+    "gameforceDesc": "Игровая сборка для максимального FPS",
+    "renderpro": "RenderPro",
+    "renderproDesc": "Сборка для рендеринга и тяжёлой графики",
+    "tensormax": "TensorMax",
+    "tensormaxDesc": "Сборка для обучения и запуска ИИ моделей",
+    "total": "Итого",
+    "viewDetails": "Подробнее",
+    "closeDetails": "Закрыть",
+    "components": "Комплектующие",
+    "addAllToCart": "В корзину"
+  },
+  "buildRoles": {
+    "buildProcessor": "Процессор",
+    "buildVideoCard": "Видеокарта",
+    "buildMotherboard": "Мат. плата",
+    "buildRam": "ОЗУ",
+    "buildStorage": "Накопитель",
+    "buildPowerSupply": "БП",
+    "buildCase": "Корпус"
   },
   "footer": {
     "copyright": "© 2026 PC parts",

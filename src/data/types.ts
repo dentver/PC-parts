@@ -33,3 +33,17 @@ export const CATEGORY_SPECS: Record<string, string[]> = {
   powerSupplies: ['wattage', 'formFactor', 'modular', 'efficiency'],
   cases: ['formFactor', 'motherboardSupport', 'fanSupport', 'driveBays'],
 }
+
+export interface BuildComponent {
+  role: string
+  product: Product
+}
+
+export interface Build {
+  id: number
+  name: string
+  slug: string
+  description: string
+  totalPrice: number
+  components: BuildComponent[]
+}
