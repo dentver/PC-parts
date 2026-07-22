@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { CATEGORIES, CATEGORY_SPECS, type Product } from '@/data/types'
 import styles from './compare.module.scss'
 
+// How many products to load at once in the overlay
 const PAGE_SIZE = 50
 
 const COMPARE_DIRECTION: Record<string, 'higher' | 'lower'> = {
@@ -28,6 +29,8 @@ const COMPARE_DIRECTION: Record<string, 'higher' | 'lower'> = {
   voltage: 'lower',
   price: 'lower',
 }
+
+// ─── Comparison helpers ─────────────────────────────────────────
 
 function parseNumericValue(value: string): number | null {
   const match = value.match(/^([\d.,]+)/)
@@ -67,6 +70,8 @@ function resultClass(result: CompareResult): string {
       return styles.comparisonValueNeutral
   }
 }
+
+// ─── Main client component ──────────────────────────────────────
 
 export function CompareClient() {
   const t = useTranslations()
@@ -236,6 +241,8 @@ export function CompareClient() {
     </section>
   )
 }
+
+// ─── Sub-components ──────────────────────────────────────────────
 
 function SelectedCard({ product, onClick }: { product: Product; onClick: () => void }) {
   const t = useTranslations()
