@@ -13,12 +13,15 @@ export function PopularProducts() {
   const locale = params.locale as string
   const [products, setProducts] = useState<Product[]>([])
   const [connecting, setConnecting] = useState(true)
-  const retryRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const loadingRef = useRef(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
     async function load() {
+      if (loadingRef.current) return
+      loadingRef.current = true
       try {
         const res = await fetch('/api/popular')
         if (!res.ok) {
@@ -28,24 +31,29 @@ export function PopularProducts() {
         if (!cancelled) {
           setProducts(data.products || [])
           setConnecting(false)
-          if (retryRef.current) {
-            clearInterval(retryRef.current)
-            retryRef.current = null
-          }
         }
       } catch {
         if (!cancelled) {
           setConnecting(true)
         }
+      } finally {
+        loadingRef.current = false
       }
     }
 
-    load()
-    retryRef.current = setInterval(load, 5000)
+    async function poll() {
+      if (cancelled) return
+      await load()
+      if (!cancelled) {
+        timerRef.current = setTimeout(poll, 5000)
+      }
+    }
+
+    poll()
 
     return () => {
       cancelled = true
-      if (retryRef.current) clearInterval(retryRef.current)
+      if (timerRef.current) clearTimeout(timerRef.current)
     }
   }, [])
 

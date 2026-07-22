@@ -3,11 +3,11 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
-import { CATEGORIES, CATEGORY_SPECS, type Product } from '@/data/types'
+import { CATEGORIES, CATEGORY_SPECS, type Product, type CategoryKey } from '@/data/types'
 import { AddToCartButton } from '@/components/add-to-cart-button'
 import styles from './catalog.module.scss'
 
-const CATEGORY_ORDER = ['processors', 'videoCards', 'motherboards', 'ram', 'storage', 'powerSupplies', 'cases']
+const CATEGORY_ORDER: CategoryKey[] = CATEGORIES.map(c => c.key)
 const PAGE_SIZE = 10
 
 interface CatEntry {

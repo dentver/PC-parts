@@ -3,30 +3,25 @@
 import { useMemo } from 'react'
 import styles from './hero-dots.module.scss'
 
-const SPACING = 36
-const COLS = 56
-const ROWS = 35
-
-interface Dot {
-  left: number
-  top: number
-  delay: number
-  duration: number
-}
+const GAP = 36
+const COLS = 48
+const ROWS = 24
 
 export function HeroDots() {
-  const dots = useMemo<Dot[]>(() => {
-    const result: Dot[] = []
+  const dots = useMemo(() => {
+    const result: Array<{ left: string; top: string; delay: string; duration: string }> = []
     let idx = 0
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
-        const seed1 = Math.sin(idx * 9301 + 49297) * 233280
-        const seed2 = Math.sin(idx * 7919 + 104729) * 233280
+        const s1 = Math.sin((idx + 1) * 9301 + 49297)
+        const s2 = Math.sin((idx + 1) * 7919 + 104729)
+        const f1 = s1 - Math.floor(s1)
+        const f2 = s2 - Math.floor(s2)
         result.push({
-          left: c * SPACING,
-          top: r * SPACING,
-          delay: (seed1 - Math.floor(seed1)) * 5,
-          duration: 3 + (seed2 - Math.floor(seed2)) * 2,
+          left: `${c * GAP}px`,
+          top: `${r * GAP}px`,
+          delay: `${(f1 * 5).toFixed(4)}s`,
+          duration: `${(3 + f2 * 2).toFixed(4)}s`,
         })
         idx++
       }
@@ -43,8 +38,8 @@ export function HeroDots() {
           style={{
             left: d.left,
             top: d.top,
-            animationDelay: `${d.delay}s`,
-            animationDuration: `${d.duration}s`,
+            animationDelay: d.delay,
+            animationDuration: d.duration,
           }}
         />
       ))}

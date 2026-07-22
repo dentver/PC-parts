@@ -13,6 +13,8 @@ import { ScrollToTop } from '@/components/scroll-to-top'
 import './globals.scss'
 import './variable.scss'
 
+const CART_SVG = fs.readFileSync(path.join(process.cwd(), 'public', 'icons', 'cart.svg'), 'utf-8')
+
 const unbounded = Unbounded({
   subsets: ['cyrillic', 'latin'],
   variable: '--font-heading',
@@ -81,7 +83,7 @@ export default async function LocaleLayout({
                   <Link href={`/${locale}/compare`}>{tnav('compare')}</Link>
                 </nav>
                 <LanguageSwitch locale={locale} />
-                <CartLink svgContent={fs.readFileSync(path.join(process.cwd(), 'public', 'icons', 'cart.svg'), 'utf-8')} />
+                <CartLink svgContent={CART_SVG} />
               </div>
             </header>
 

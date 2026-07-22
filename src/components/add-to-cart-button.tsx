@@ -18,12 +18,7 @@ export function AddToCartButton({ id, name, categoryKey, price, className }: Pro
 
   return (
     <button
-      className={className}
-      style={inCart ? {
-        background: 'transparent',
-        color: '#d29f22',
-        border: '1px solid #d29f22',
-      } : undefined}
+      className={`${className ?? ''} ${inCart ? 'btnInCart' : ''}`.trim() || undefined}
       disabled={inCart}
       onClick={() => addItem({ id, name, categoryKey, price })}
     >

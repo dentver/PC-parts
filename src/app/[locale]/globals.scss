@@ -1,5 +1,15 @@
 @use 'variable' as *;
 
+:root {
+  --color-gold: #d29f22;
+  --color-muted: #b8a86a;
+  --color-gray: #252628;
+  --color-white: #ffd381;
+  --color-green: #4caf50;
+  --color-bright-red: #ef5350;
+  --color-black: #000;
+}
+
 *,
 *::before,
 *::after {
@@ -117,4 +127,46 @@ a {
   justify-content: center;
   color: $muted;
   font-size: 0.85rem;
+}
+
+.btnInCart {
+  background: transparent !important;
+  color: $gold !important;
+  border: 1px solid $gold !important;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: $gold;
+  color: $black;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.scrollTopBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: $gold;
+  color: $black;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 100;
 }

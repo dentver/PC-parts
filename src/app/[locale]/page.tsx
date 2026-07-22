@@ -8,13 +8,17 @@ import { CATEGORIES } from '@/data/types'
 import fs from 'fs'
 import path from 'path'
 
+const iconCache = new Map<string, string>()
+
 function CategoryIcon({ categoryKey }: { categoryKey: string }) {
-  const svgContent = fs.readFileSync(
-    path.join(process.cwd(), 'public', 'icons', `${categoryKey}.svg`),
-    'utf-8'
-  )
+  if (!iconCache.has(categoryKey)) {
+    iconCache.set(categoryKey, fs.readFileSync(
+      path.join(process.cwd(), 'public', 'icons', `${categoryKey}.svg`),
+      'utf-8'
+    ))
+  }
   return (
-    <div className={styles.categoryIcon} dangerouslySetInnerHTML={{ __html: svgContent }} />
+    <div className={styles.categoryIcon} dangerouslySetInnerHTML={{ __html: iconCache.get(categoryKey)! }} />
   )
 }
 

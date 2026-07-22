@@ -9,7 +9,6 @@ export interface Product {
   categoryKey: string
   price: number
   specs: Spec[]
-  description: string
 }
 
 export const CATEGORIES = [
@@ -43,7 +42,6 @@ export interface Build {
   id: number
   name: string
   slug: string
-  description: string
   totalPrice: number
   components: BuildComponent[]
 }
