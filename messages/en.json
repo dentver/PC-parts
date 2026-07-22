@@ -102,6 +102,16 @@
     "components": "Components",
     "addAllToCart": "Add to cart"
   },
+  "compare": {
+    "title": "Component Comparison",
+    "selectCategory": "Select a category",
+    "selectComponent": "Select components",
+    "selectSecond": "Select components",
+    "loading": "Loading...",
+    "price": "Price",
+    "overlayTitle": "Select a component",
+    "noProducts": "No products in this category yet"
+  },
   "buildRoles": {
     "buildProcessor": "Processor",
     "buildVideoCard": "Video Card",

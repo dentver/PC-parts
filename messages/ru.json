@@ -102,6 +102,16 @@
     "components": "Комплектующие",
     "addAllToCart": "В корзину"
   },
+  "compare": {
+    "title": "Сравнение комплектующих",
+    "selectCategory": "Выберите категорию",
+    "selectComponent": "Выберите комплектующие",
+    "selectSecond": "Выберите комплектующие",
+    "loading": "Загрузка...",
+    "price": "Цена",
+    "overlayTitle": "Выберите комплектующее",
+    "noProducts": "В этой категории пока нет товаров"
+  },
   "buildRoles": {
     "buildProcessor": "Процессор",
     "buildVideoCard": "Видеокарта",

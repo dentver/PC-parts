@@ -1,0 +1,352 @@
+@use '../variable' as *;
+
+.page {
+  padding: 2rem 1.5rem 4rem;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.categoryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid $gray;
+  border-radius: 999px;
+  background: transparent;
+  color: $muted;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+
+  &:not(.pillActive):hover {
+    border-color: $gold;
+    color: $gold;
+  }
+}
+
+.pillActive {
+  background: $gold;
+  color: $black;
+  border-color: $gold;
+  font-weight: 600;
+}
+
+.selectCategory {
+  text-align: center;
+  color: $muted;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 4rem 1rem;
+}
+
+.selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 200px;
+  border: 2px dashed #fff;
+  border-radius: 14px;
+  background: $card;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  padding: 1.5rem;
+  text-align: center;
+
+  &:hover {
+    border-color: $gold;
+    background-color: lab(3.59198% 1.70419 -3.2488);
+  }
+
+  span {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: $muted;
+  }
+}
+
+.placeholderIcon {
+  font-size: 1.5rem;
+  color: $gray;
+}
+
+.selectedCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  background: $card;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-height: 200px;
+
+  &:hover {
+    border-color: $gold;
+  }
+}
+
+.selectedBadge {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: $gold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid $gold;
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+}
+
+.selectedName {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.selectedSpecs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: auto;
+}
+
+.selectedSpecRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.selectedSpecLabel {
+  color: $muted;
+}
+
+.selectedSpecValue {
+  color: $white;
+}
+
+.selectedFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  border-top: 1px solid $gray;
+}
+
+.selectedPrice {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: $gold;
+}
+
+.selectedChange {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: $muted;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+// ─── Overlay ────────────────────────────────────────────────────
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1.5rem;
+}
+
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  max-height: 80vh;
+  background: $black;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.overlayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid $gray;
+}
+
+.overlayTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.overlayClose {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: $muted;
+  background: none;
+  border: 1px solid $gray;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: $gold;
+    color: $gold;
+  }
+}
+
+.overlayGrid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.overlayCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid $gray;
+  border-radius: 10px;
+  background: $card;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: $gold;
+  }
+}
+
+.overlayCardName {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.overlayCardSpecs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: auto;
+}
+
+.overlayCardSpec {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: $muted;
+}
+
+.overlayCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.4rem;
+  border-top: 1px solid $gray;
+}
+
+.overlayCardPrice {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $gold;
+}
+
+.overlayLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: $muted;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+// ─── Comparison table ───────────────────────────────────────────
+
+.comparison {
+  margin-top: 1rem;
+}
+
+.comparisonTitle {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparisonRow {
+  border-bottom: 1px solid $gray;
+}
+
+.comparisonLabel {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: $muted;
+  padding: 0.75rem 1rem;
+  width: 30%;
+  vertical-align: middle;
+}
+
+.comparisonValue {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  width: 35%;
+  vertical-align: middle;
+}
+
+.comparisonValueGreen {
+  color: $green;
+  font-weight: 600;
+}
+
+.comparisonValueRed {
+  color: $bright-red;
+  font-weight: 600;
+}
+
+.comparisonValueNeutral {
+  color: $gold;
+}
