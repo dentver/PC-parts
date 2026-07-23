@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
-import { CATEGORIES, CATEGORY_SPECS, type Product } from '@/data/types'
+import { useParams } from 'next/navigation'
+import { CATEGORIES, CATEGORY_SPECS, type Product, type CategoryKey } from '@/data/types'
+import { formatPrice } from '@/data/format-price'
 import styles from './compare.module.scss'
 
 // How many products to load at once in the overlay
@@ -56,10 +58,6 @@ function compareValues(specKey: string, val1: string, val2: string): [CompareRes
   }
 }
 
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat('ru-RU').format(price)
-}
-
 function resultClass(result: CompareResult): string {
   switch (result) {
     case 'better':
@@ -75,6 +73,8 @@ function resultClass(result: CompareResult): string {
 
 export function CompareClient() {
   const t = useTranslations()
+  const params = useParams()
+  const locale = (params.locale as string) || 'en'
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [product1, setProduct1] = useState<Product | null>(null)
   const [product2, setProduct2] = useState<Product | null>(null)
@@ -97,6 +97,7 @@ export function CompareClient() {
       setOverlayLoading(true)
       try {
         const params = new URLSearchParams({ category: activeCategory, first: String(PAGE_SIZE) })
+        if (locale) params.set('locale', locale)
         const res = await fetch(`/api/category-products?${params}`)
         if (!res.ok) throw new Error('Failed to fetch')
         const data = await res.json()
@@ -147,14 +148,14 @@ export function CompareClient() {
           <>
             <div className={styles.selectors}>
               {product1 ? (
-                <SelectedCard product={product1} onClick={() => openOverlay(1)} />
+                <SelectedCard product={product1} onClick={() => openOverlay(1)} locale={locale} />
               ) : (
                 <button className={styles.placeholder} onClick={() => openOverlay(1)}>
                   <span>{t('compare.selectComponent')}</span>
                 </button>
               )}
               {product2 ? (
-                <SelectedCard product={product2} onClick={() => openOverlay(2)} />
+                <SelectedCard product={product2} onClick={() => openOverlay(2)} locale={locale} />
               ) : (
                 <button className={styles.placeholder} onClick={() => openOverlay(2)}>
                   <span>{t('compare.selectSecond')}</span>
@@ -192,10 +193,10 @@ export function CompareClient() {
                         return (
                           <>
                             <td className={`${styles.comparisonValue} ${resultClass(r1)}`}>
-                              {formatPrice(product1!.price)} ₽
+                              {formatPrice(product1!.price, locale)}
                             </td>
                             <td className={`${styles.comparisonValue} ${resultClass(r2)}`}>
-                              {formatPrice(product2!.price)} ₽
+                              {formatPrice(product2!.price, locale)}
                             </td>
                           </>
                         )
@@ -230,6 +231,7 @@ export function CompareClient() {
                       key={product.id}
                       product={product}
                       onClick={() => selectProduct(product)}
+                      locale={locale}
                     />
                   ))}
                 </div>
@@ -244,7 +246,7 @@ export function CompareClient() {
 
 // ─── Sub-components ──────────────────────────────────────────────
 
-function SelectedCard({ product, onClick }: { product: Product; onClick: () => void }) {
+function SelectedCard({ product, onClick, locale }: { product: Product; onClick: () => void; locale: string }) {
   const t = useTranslations()
   const specKeys = CATEGORY_SPECS[product.categoryKey] || []
   return (
@@ -264,14 +266,14 @@ function SelectedCard({ product, onClick }: { product: Product; onClick: () => v
         })}
       </div>
       <div className={styles.selectedFooter}>
-        <span className={styles.selectedPrice}>{formatPrice(product.price)} ₽</span>
+        <span className={styles.selectedPrice}>{formatPrice(product.price, locale)}</span>
         <span className={styles.selectedChange}>Изменить</span>
       </div>
     </div>
   )
 }
 
-function OverlayCard({ product, onClick }: { product: Product; onClick: () => void }) {
+function OverlayCard({ product, onClick, locale }: { product: Product; onClick: () => void; locale: string }) {
   const t = useTranslations()
   const specKeys = CATEGORY_SPECS[product.categoryKey] || []
   return (
@@ -289,7 +291,7 @@ function OverlayCard({ product, onClick }: { product: Product; onClick: () => vo
         })}
       </div>
       <div className={styles.overlayCardFooter}>
-        <span className={styles.overlayCardPrice}>{formatPrice(product.price)} ₽</span>
+        <span className={styles.overlayCardPrice}>{formatPrice(product.price, locale)}</span>
       </div>
     </div>
   )

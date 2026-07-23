@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useCart } from '@/context/cart-context'
+import { formatPrice } from '@/data/format-price'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import styles from './cart.module.scss'
@@ -46,14 +47,14 @@ export function CartClient() {
                         <div key={c.id} className={styles.componentRow}>
                           <span className={styles.componentRole}>{t(`buildRoles.${c.role}`)}</span>
                           <span className={styles.componentName}>{c.name}</span>
-                          <span className={styles.componentPrice}>{new Intl.NumberFormat('ru-RU').format(c.price)} ₽</span>
+                          <span className={styles.componentPrice}>{formatPrice(c.price, locale)}</span>
                         </div>
                       ))}
                     </div>
                   )}
                   <div className={styles.itemFooter}>
                     <span className={styles.itemPrice}>
-                      {new Intl.NumberFormat('ru-RU').format(item.price)} ₽
+                      {formatPrice(item.price, locale)}
                     </span>
                     <div className={styles.quantity}>
                       <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
@@ -70,7 +71,7 @@ export function CartClient() {
                   <h3 className={styles.itemName}>{item.name}</h3>
                   <div className={styles.itemFooter}>
                     <span className={styles.itemPrice}>
-                      {new Intl.NumberFormat('ru-RU').format(item.price)} ₽
+                      {formatPrice(item.price, locale)}
                     </span>
                     <div className={styles.quantity}>
                       <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
@@ -87,7 +88,7 @@ export function CartClient() {
               <h2 className={styles.summaryTitle}>{t('cart.summary')}</h2>
               <div className={styles.summaryRow}>
                 <span>{t('cart.subtotal')}</span>
-                <span>{new Intl.NumberFormat('ru-RU').format(totalPrice)} ₽</span>
+                <span>{formatPrice(totalPrice, locale)}</span>
               </div>
               <div className={styles.summaryRow}>
                 <span>{t('cart.shipping')}</span>
@@ -96,7 +97,7 @@ export function CartClient() {
               <div className={styles.divider} />
               <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
                 <span>{t('cart.total')}</span>
-                <span>{new Intl.NumberFormat('ru-RU').format(totalPrice)} ₽</span>
+                <span>{formatPrice(totalPrice, locale)}</span>
               </div>
               <button className={styles.btnCheckout}>{t('cart.checkout')}</button>
               <Link href={`/${locale}/catalog`} className={styles.continueLink}>{t('cart.continueShopping')}</Link>

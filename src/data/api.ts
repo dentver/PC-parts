@@ -1,6 +1,9 @@
 const API = process.env.SALEOR_API_URL || ''
 const TOKEN = process.env.SALEOR_API_TOKEN || ''
-const CHANNEL_SLUG = 'default-channel'
+
+function getChannelSlug(locale?: string): string {
+  return locale === 'ru' ? 'channel-rub' : 'default-channel'
+}
 
 async function gql<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -102,6 +105,7 @@ export async function getCategoryProducts(
   categorySlug: string,
   first: number,
   after?: string | null,
+  locale?: string,
 ): Promise<{
   products: import('./types').Product[]
   totalCount: number
@@ -125,7 +129,7 @@ export async function getCategoryProducts(
         pageInfo { hasNextPage endCursor }
       }
     }`,
-    { channel: CHANNEL_SLUG, first, after: after || null, filter: { categories: [catId] } }
+    { channel: getChannelSlug(locale), first, after: after || null, filter: { categories: [catId] } }
   )
 
   return {
@@ -137,7 +141,7 @@ export async function getCategoryProducts(
 
 // ─── Category counts ───────────────────────────────────────────
 
-export async function getCategoryCounts(): Promise<Record<string, number>> {
+export async function getCategoryCounts(locale?: string): Promise<Record<string, number>> {
   const data = await gql<{
     categories: {
       edges: Array<{
@@ -158,7 +162,7 @@ export async function getCategoryCounts(): Promise<Record<string, number>> {
         }
       }
     }`,
-    { channel: CHANNEL_SLUG }
+    { channel: getChannelSlug(locale) }
   )
 
   const counts: Record<string, number> = {}
@@ -168,10 +172,10 @@ export async function getCategoryCounts(): Promise<Record<string, number>> {
   return counts
 }
 
-export async function getTotalProductCount(): Promise<number> {
+export async function getTotalProductCount(locale?: string): Promise<number> {
   const data = await gql<{ products: { totalCount: number } }>(
     `query($channel: String!) { products(channel: $channel) { totalCount } }`,
-    { channel: CHANNEL_SLUG }
+    { channel: getChannelSlug(locale) }
   )
   return data.products.totalCount
 }
@@ -183,16 +187,22 @@ export async function getProducts(
   after?: string | null,
   category?: string | null,
   sort?: string | null,
+  locale?: string,
 ): Promise<{
   products: import('./types').Product[]
   pageInfo: { hasNextPage: boolean; endCursor: string | null }
 }> {
-  const vars: Record<string, unknown> = { channel: CHANNEL_SLUG, first, after: after || null }
+  const vars: Record<string, unknown> = { channel: getChannelSlug(locale), first, after: after || null }
 
+  const map = await getCategoryMap()
   if (category) {
-    const map = await getCategoryMap()
     const catId = map[category]
     if (catId) vars.filter = { categories: [catId] }
+  } else {
+    const catIds = Object.entries(map)
+      .filter(([slug]) => slug !== 'builds')
+      .map(([, id]) => id)
+    vars.filter = { categories: catIds }
   }
 
   if (sort === 'price-asc') vars.sortBy = { field: 'PRICE', direction: 'ASC' }
@@ -221,7 +231,8 @@ export async function getProducts(
 
 // ─── Popular products ──────────────────────────────────────────
 
-export async function getPopularProducts(): Promise<import('./types').Product[]> {
+export async function getPopularProducts(locale?: string): Promise<import('./types').Product[]> {
+  const channel = getChannelSlug(locale)
   try {
     const ordersData = await gql<{
       orders: {
@@ -240,7 +251,7 @@ export async function getPopularProducts(): Promise<import('./types').Product[]>
           edges { node { lines { variant { product { id } } quantity } } }
         }
       }`,
-      { channel: CHANNEL_SLUG }
+      { channel }
     )
 
     const orderLines = ordersData.orders.edges.flatMap(e => e.node.lines).filter(l => l.variant)
@@ -264,7 +275,7 @@ export async function getPopularProducts(): Promise<import('./types').Product[]>
             edges { node { ${PRODUCT_FRAGMENT} } }
           }
         }`,
-        { channel: CHANNEL_SLUG, first: 50 }
+        { channel, first: 50 }
       )
 
       const mapped: import('./types').Product[] = []
@@ -289,7 +300,7 @@ export async function getPopularProducts(): Promise<import('./types').Product[]>
             edges { node { ${PRODUCT_FRAGMENT} } }
           }
         }`,
-        { channel: CHANNEL_SLUG, catId: catMap[catSlug] }
+        { channel, catId: catMap[catSlug] }
       ).then(d => d.products.edges[0]?.node)
     )
 
@@ -306,7 +317,7 @@ export async function getPopularProducts(): Promise<import('./types').Product[]>
           edges { node { ${PRODUCT_FRAGMENT} } }
         }
       }`,
-      { channel: CHANNEL_SLUG, first: needed + 5 }
+      { channel, first: needed + 5 }
     )
     const fill = fillData.products.edges
       .map(e => e.node)
@@ -321,7 +332,7 @@ export async function getPopularProducts(): Promise<import('./types').Product[]>
 
 // ─── Builds ────────────────────────────────────────────────
 
-export async function getBuilds(): Promise<import('./types').Build[]> {
+export async function getBuilds(locale?: string): Promise<import('./types').Build[]> {
   const catMap = await getCategoryMap()
   const buildsCatId = catMap['builds']
   if (!buildsCatId) throw new Error('Builds category not found')
@@ -356,7 +367,7 @@ export async function getBuilds(): Promise<import('./types').Build[]> {
         edges { node { ${PRODUCT_FRAGMENT} } }
       }
     }`,
-    { first: 100, channel: CHANNEL_SLUG }
+    { first: 100, channel: getChannelSlug(locale) }
   )
 
   const productBySlug = new Map<string, import('./types').Product>()

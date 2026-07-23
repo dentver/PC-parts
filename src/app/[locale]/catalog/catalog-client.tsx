@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useParams } from 'next/navigation'
 import { CATEGORIES, CATEGORY_SPECS, type Product, type CategoryKey } from '@/data/types'
+import { formatPrice } from '@/data/format-price'
 import { AddToCartButton } from '@/components/add-to-cart-button'
 import styles from './catalog.module.scss'
 
@@ -20,9 +21,10 @@ interface CatEntry {
 const productCache = new Map<number, Product>()
 const catCache = new Map<string, CatEntry>()
 
-async function fetchCatProducts(catKey: string, first: number, after?: string | null) {
+async function fetchCatProducts(catKey: string, first: number, after?: string | null, locale?: string) {
   const params = new URLSearchParams({ category: catKey, first: String(first) })
   if (after) params.set('after', after)
+  if (locale) params.set('locale', locale)
   const res = await fetch(`/api/category-products?${params}`)
   if (!res.ok) {
     const text = await res.text().catch(() => 'unknown')
@@ -35,11 +37,12 @@ async function fetchCatProducts(catKey: string, first: number, after?: string | 
   }>
 }
 
-async function fetchSimple(first: number, after?: string | null, category?: string | null, sort?: string | null) {
+async function fetchSimple(first: number, after?: string | null, category?: string | null, sort?: string | null, locale?: string) {
   const params = new URLSearchParams({ first: String(first) })
   if (after) params.set('after', after)
   if (category) params.set('category', category)
   if (sort && sort !== 'default') params.set('sort', sort)
+  if (locale) params.set('locale', locale)
   const res = await fetch(`/api/products?${params}`)
   if (!res.ok) {
     const text = await res.text().catch(() => 'unknown')
@@ -80,20 +83,26 @@ export function CatalogClient({
   initialTotal,
   categoryCounts,
   initialCategory = null,
+  initialSort = null,
 }: {
   initialTotal: number
   categoryCounts: Record<string, number>
   initialCategory?: string | null
+  initialSort?: string | null
 }) {
   const t = useTranslations()
   const router = useRouter()
   const pathname = usePathname()
+  const paramsHook = useParams()
+  const locale = (paramsHook.locale as string) || 'en'
   const [productIds, setProductIds] = useState<number[]>(() => buildVirtualCatalog())
   const [loading, setLoading] = useState(() => productIds.length === 0)
   const [connecting, setConnecting] = useState(false)
   const [allLoaded, setAllLoaded] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory)
-  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default')
+  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>(
+    (initialSort as 'default' | 'price-asc' | 'price-desc') || 'default'
+  )
 
   const [simplePageInfo, setSimplePageInfo] = useState<{ hasNextPage: boolean; endCursor: string | null } | null>(null)
 
@@ -134,7 +143,7 @@ export function CatalogClient({
     setLoading(true)
     setConnecting(false)
     try {
-      const data = await fetchSimple(PAGE_SIZE, after, activeCategory, sortBy)
+      const data = await fetchSimple(PAGE_SIZE, after, activeCategory, sortBy, locale)
       if (!mountedRef.current) return
       for (const p of data.products) productCache.set(p.id, p)
       setProductIds(prev => replace ? data.products.map(p => p.id) : [...prev, ...data.products.map(p => p.id)])
@@ -147,7 +156,7 @@ export function CatalogClient({
       loadingRef.current = false
       setLoading(false)
     }
-  }, [clearRetry, activeCategory, sortBy, startRetry])
+  }, [clearRetry, activeCategory, sortBy, startRetry, locale])
 
   const doCategoryFetch = useCallback(async () => {
     if (loadingRef.current) return
@@ -181,7 +190,7 @@ export function CatalogClient({
         await Promise.all(fetchTasks.map(async ({ catKey, count }) => {
           if (!mountedRef.current) return
           const entry = catCache.get(catKey) ?? { productIds: [], total: counts[catKey] ?? 0, cursor: null, hasNextPage: true }
-          const data = await fetchCatProducts(catKey, count, entry.cursor)
+          const data = await fetchCatProducts(catKey, count, entry.cursor, locale)
           if (!mountedRef.current) return
           for (const p of data.products) productCache.set(p.id, p)
           entry.productIds.push(...data.products.map(p => p.id))
@@ -202,7 +211,7 @@ export function CatalogClient({
       loadingRef.current = false
       setLoading(false)
     }
-  }, [clearRetry, startRetry])
+  }, [clearRetry, startRetry, locale])
 
   useEffect(() => {
     clearRetry()
@@ -227,7 +236,7 @@ export function CatalogClient({
     }
     return clearRetry
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAllMode, activeCategory, sortBy])
+  }, [isAllMode, activeCategory, sortBy, locale])
 
   useEffect(() => {
     const el = triggerRef.current
@@ -268,7 +277,9 @@ export function CatalogClient({
               className={`${styles.pill} ${activeCategory === null ? styles.pillActive : ''}`}
               onClick={() => {
                 setActiveCategory(null)
-                router.replace(pathname)
+                const params = new URLSearchParams()
+                if (sortBy !== 'default') params.set('sort', sortBy)
+                router.replace(`${pathname}?${params.toString()}`)
               }}
             >
               {t('catalog.all')}
@@ -279,7 +290,10 @@ export function CatalogClient({
                 className={`${styles.pill} ${activeCategory === cat.key ? styles.pillActive : ''}`}
                 onClick={() => {
                   setActiveCategory(cat.key)
-                  router.replace(`${pathname}?category=${cat.key}`)
+                  const params = new URLSearchParams()
+                  params.set('category', cat.key)
+                  if (sortBy !== 'default') params.set('sort', sortBy)
+                  router.replace(`${pathname}?${params.toString()}`)
                 }}
               >
                 {t(`categories.${cat.key}`)}
@@ -290,7 +304,14 @@ export function CatalogClient({
           <select
             className={styles.sortSelect}
             value={sortBy}
-            onChange={e => setSortBy(e.target.value as typeof sortBy)}
+            onChange={e => {
+              const value = e.target.value as typeof sortBy
+              setSortBy(value)
+              const params = new URLSearchParams()
+              if (activeCategory) params.set('category', activeCategory)
+              if (value !== 'default') params.set('sort', value)
+              router.replace(`${pathname}?${params.toString()}`)
+            }}
           >
             <option value="default">{t('catalog.sortDefault')}</option>
             <option value="price-asc">{t('catalog.sortPriceAsc')}</option>
@@ -333,8 +354,9 @@ export function CatalogClient({
 
 function ProductCard({ product }: { product: Product }) {
   const t = useTranslations()
+  const paramsHook = useParams()
+  const locale = (paramsHook.locale as string) || 'en'
   const specKeys = CATEGORY_SPECS[product.categoryKey] || []
-  const formattedPrice = new Intl.NumberFormat('ru-RU').format(product.price)
 
   return (
     <div className={styles.card}>
@@ -355,7 +377,7 @@ function ProductCard({ product }: { product: Product }) {
         })}
       </div>
       <div className={styles.footer}>
-        <span className={styles.price}>{formattedPrice} ₽</span>
+        <span className={styles.price}>{formatPrice(product.price, locale)}</span>
         <AddToCartButton
           id={product.id}
           name={product.name}

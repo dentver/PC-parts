@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import { useCart } from '@/context/cart-context'
 import { CATEGORY_SPECS } from '@/data/types'
+import { formatPrice } from '@/data/format-price'
 import type { Build } from '@/data/types'
 import cardStyles from '@/app/[locale]/catalog/catalog.module.scss'
 import styles from './builds.module.scss'
@@ -13,13 +15,15 @@ let cachedBuilds: Build[] | null = null
 export function BuildsClient() {
   const t = useTranslations()
   const cart = useCart()
+  const params = useParams()
+  const locale = (params.locale as string) || 'en'
   const [builds, setBuilds] = useState<Build[]>(cachedBuilds ?? [])
   const [selected, setSelected] = useState<Build | null>(null)
   const [loading, setLoading] = useState(!cachedBuilds)
 
   useEffect(() => {
     if (cachedBuilds) return
-    fetch('/api/builds')
+    fetch(`/api/builds?locale=${locale}`)
       .then(r => r.ok ? r.json() : [])
       .then(data => { cachedBuilds = data; setBuilds(data); setLoading(false) })
       .catch(() => setLoading(false))
@@ -44,7 +48,7 @@ export function BuildsClient() {
         <h1 className={styles.title}>{t('builds.title')}</h1>
         <div className={styles.grid}>
           {builds.map(build => {
-            const formattedPrice = new Intl.NumberFormat('ru-RU').format(build.totalPrice)
+            const formattedPrice = formatPrice(build.totalPrice, locale)
             return (
               <div key={build.slug} className={styles.card}>
                 <h2 className={styles.buildName}>{t(`builds.${build.slug}`)}</h2>
@@ -58,7 +62,7 @@ export function BuildsClient() {
                   ))}
                 </div>
                 <div className={styles.footer}>
-                  <span className={styles.total}>{t('builds.total')}: {formattedPrice} ₽</span>
+                  <span className={styles.total}>{t('builds.total')}: {formattedPrice}</span>
                   <button className={styles.detailsBtn} onClick={() => setSelected(build)}>
                     {t('builds.viewDetails')}
                   </button>
@@ -82,7 +86,7 @@ export function BuildsClient() {
             <div className={styles.modalComponents}>
               {selected.components.map(c => {
                 const specKeys = CATEGORY_SPECS[c.product.categoryKey] || []
-                const formattedPrice = new Intl.NumberFormat('ru-RU').format(c.product.price)
+                const formattedPrice = formatPrice(c.product.price, locale)
                 return (
                   <div key={c.role} className={cardStyles.card}>
                     <span className={cardStyles.badge}>
@@ -102,14 +106,14 @@ export function BuildsClient() {
                       })}
                     </div>
                     <div className={cardStyles.footer}>
-                      <span className={cardStyles.price}>{formattedPrice} ₽</span>
+                      <span className={cardStyles.price}>{formattedPrice}</span>
                     </div>
                   </div>
                 )
               })}
             </div>
             <div className={styles.modalTotal}>
-              <span className={styles.total}>{t('builds.total')}: {new Intl.NumberFormat('ru-RU').format(selected.totalPrice)} ₽</span>
+              <span className={styles.total}>{t('builds.total')}: {formatPrice(selected.totalPrice, locale)}</span>
               <button
                 className={styles.addAllBtn}
                 onClick={() => {

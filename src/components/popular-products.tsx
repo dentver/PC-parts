@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
+import { formatPrice } from '@/data/format-price'
 import { AddToCartButton } from '@/components/add-to-cart-button'
 import type { Product } from '@/data/types'
 import styles from '@/app/[locale]/main.module.scss'
@@ -23,7 +24,7 @@ export function PopularProducts() {
       if (loadingRef.current) return
       loadingRef.current = true
       try {
-        const res = await fetch('/api/popular')
+        const res = await fetch(`/api/popular?locale=${locale}`)
         if (!res.ok) {
           throw new Error('Failed')
         }
@@ -75,7 +76,6 @@ export function PopularProducts() {
   return (
     <div className={styles.productsGrid} style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
       {products.map((product) => {
-        const formattedPrice = new Intl.NumberFormat('ru-RU').format(product.price)
         return (
           <div key={product.id} className={styles.productCard}>
             <span className={styles.productBadge}>{t(`categories.${product.categoryKey}`)}</span>
@@ -89,7 +89,7 @@ export function PopularProducts() {
               ))}
             </div>
             <div className={styles.productFooter}>
-              <span className={styles.productPrice}>{formattedPrice} ₽</span>
+              <span className={styles.productPrice}>{formatPrice(product.price, locale)}</span>
               <AddToCartButton
                 id={product.id}
                 name={product.name}

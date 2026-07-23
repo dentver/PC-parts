@@ -1,0 +1,86 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-gray);
+  border-radius: 14px;
+  background: var(--color-card);
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: var(--color-gold);
+  }
+}
+
+.badge {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--color-gold);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+}
+
+.name {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: auto;
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.specLabel {
+  color: var(--color-muted);
+}
+
+.specValue {
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-gray);
+}
+
+.price {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.btnAdd {
+  padding: 0.5rem 1rem;
+  background: var(--color-gold);
+  color: var(--color-black);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}

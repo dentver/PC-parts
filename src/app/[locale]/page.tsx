@@ -25,7 +25,7 @@ function CategoryIcon({ categoryKey }: { categoryKey: string }) {
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const [categoryCounts, t] = await Promise.all([
-    getCategoryCounts().catch(() => ({}) as Record<string, number>),
+    getCategoryCounts(locale).catch(() => ({}) as Record<string, number>),
     getTranslations({ locale }),
   ])
 
