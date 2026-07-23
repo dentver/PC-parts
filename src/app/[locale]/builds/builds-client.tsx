@@ -22,6 +22,15 @@ export function BuildsClient() {
   const [loading, setLoading] = useState(!cachedBuilds)
 
   useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [selected])
+
+  useEffect(() => {
     if (cachedBuilds) return
     fetch(`/api/builds?locale=${locale}`)
       .then(r => r.ok ? r.json() : [])

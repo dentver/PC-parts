@@ -72,9 +72,10 @@ export function PopularProducts() {
   }
 
   const columns = products.length <= 3 ? products.length : products.length <= 4 ? 2 : products.length <= 6 ? 3 : 4
+  const colsClass = columns === 4 ? styles.cols4 : columns === 3 ? styles.cols3 : styles.cols2
 
   return (
-    <div className={styles.productsGrid} style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+    <div className={`${styles.popularGrid} ${colsClass}`}>
       {products.map((product) => {
         return (
           <div key={product.id} className={styles.productCard}>

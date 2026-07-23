@@ -20,6 +20,13 @@
     margin: 0 auto;
   }
 
+  @media (max-width: 768px) {
+    padding: 3rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2.5rem 0.75rem;
+  }
 }
 
 .badge {
@@ -34,6 +41,11 @@
   background: rgba(210, 159, 34, 0.05);
   margin-bottom: 2rem;
   color: $gold;
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.3rem 1.25rem;
+  }
 }
 
 .badgeDot {
@@ -49,6 +61,14 @@
   font-weight: 800;
   line-height: 1.3;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
 }
 
 .heroGold {
@@ -60,6 +80,10 @@
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 2rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+  }
 }
 
 .heroActions {
@@ -90,6 +114,11 @@
     transform: translateY(2px);
     transition: transform 0.1s;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    padding: 0.65rem 1.25rem;
+  }
 }
 
 .btnSecondary {
@@ -113,11 +142,24 @@
     transform: translateY(2px);
     transition: transform 0.1s;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    padding: 0.65rem 1.25rem;
+  }
 }
 
 .section {
   padding: 4rem 1.5rem;
   background: $black;
+
+  @media (max-width: 768px) {
+    padding: 3rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2rem 0.75rem;
+  }
 }
 
 .sectionInner {
@@ -131,6 +173,10 @@
   font-weight: 700;
   margin-bottom: 2rem;
   text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 1.35rem;
+  }
 }
 
 .categoriesGrid {
@@ -174,11 +220,38 @@
   &:hover {
     border-color: $gold;
   }
+
+  @media (max-width: 768px) {
+    width: 180px;
+    padding: 1.5rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    width: calc(50% - 0.5rem);
+    min-width: 140px;
+    flex-shrink: 1;
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .categoryName {
   font-weight: 600;
   font-size: 0.95rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+}
+
+a[data-category="motherboards"] .categoryName {
+  @media (max-width: 403px) {
+    display: inline-block;
+    width: min-content;
+    margin: 0 auto;
+    border: 1px solid #d29f22;
+    padding: 0.075rem 0.075rem;
+    border-radius: 4px;
+  }
 }
 
 .categoryCount {
@@ -191,6 +264,20 @@
   display: grid;
   gap: 1.25rem;
 }
+
+.popularGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+
+  @media (min-width: 601px) {
+    gap: 1.25rem;
+  }
+}
+
+.cols2 { @media (min-width: 601px) { grid-template-columns: repeat(2, 1fr); } }
+.cols3 { @media (min-width: 601px) { grid-template-columns: repeat(3, 1fr); } }
+.cols4 { @media (min-width: 601px) { grid-template-columns: repeat(4, 1fr); } }
 
 .productCard {
   display: flex;
@@ -205,6 +292,11 @@
   &:hover {
     border-color: $gold;
   }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
 }
 
 .productBadge {
@@ -218,6 +310,11 @@
   border: 1px solid $gold;
   border-radius: 6px;
   padding: 0.15rem 0.5rem;
+
+  @media (max-width: 480px) {
+    width: auto;
+    max-width: min-content;
+  }
 }
 
 .productName {
@@ -237,6 +334,10 @@
   justify-content: space-between;
   font-family: var(--font-mono);
   font-size: 0.8rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 }
 
 .specLabel {
@@ -245,6 +346,8 @@
 
 .specValue {
   color: $white;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .productFooter {
@@ -253,6 +356,11 @@
   justify-content: space-between;
   padding-top: 0.75rem;
   border-top: 1px solid $gray;
+
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 }
 
 .productPrice {
@@ -275,6 +383,11 @@
 
   &:hover {
     opacity: 0.85;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
   }
 }
 

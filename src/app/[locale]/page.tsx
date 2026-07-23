@@ -56,7 +56,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <h2 className={styles.sectionTitle}>{t('categories.title')}</h2>
           <div className={styles.categoriesGrid}>
             {CATEGORIES.map((cat) => (
-              <a key={cat.key} href={`/${locale}/catalog?category=${cat.key}`} className={styles.categoryCard}>
+              <a key={cat.key} href={`/${locale}/catalog?category=${cat.key}`} className={styles.categoryCard} data-category={cat.key}>
                 <CategoryIcon categoryKey={cat.key} />
                 <span className={styles.categoryName}>{t(`categories.${cat.key}`)}</span>
                 <span className={styles.categoryCount}>

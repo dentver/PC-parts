@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import styles from './hero-dots.module.scss'
 
 const GAP = 36
@@ -8,7 +8,18 @@ const COLS = 48
 const ROWS = 24
 
 export function HeroDots() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+    const onResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   const dots = useMemo(() => {
+    const maxCols = isMobile ? 20 : COLS
+    const maxRows = isMobile ? 12 : ROWS
     const result: Array<{ left: string; top: string; delay: string; duration: string }> = []
     let idx = 0
     for (let r = 0; r < ROWS; r++) {

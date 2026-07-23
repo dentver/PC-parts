@@ -8,6 +8,7 @@
   --color-green: #4caf50;
   --color-bright-red: #ef5350;
   --color-black: #000;
+  --color-card: lab(7.10513% 1.15619 -5.39807);
 }
 
 *,
@@ -48,6 +49,11 @@ a {
   display: flex;
   align-items: center;
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
 }
 
 .logo {
@@ -55,6 +61,7 @@ a {
   font-weight: 700;
   font-size: 1.25rem;
   color: $gold;
+  flex-shrink: 0;
 }
 
 .nav {
@@ -87,6 +94,10 @@ a {
       }
     }
   }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .language-switch {
@@ -102,7 +113,6 @@ a {
 }
 
 .cart-link {
-  margin-left: 1rem;
   display: flex;
   align-items: center;
   transition: color 0.2s;
@@ -117,6 +127,107 @@ a {
     color: $gold;
     transform: scale(1.15);
   }
+
+  @media (max-width: 768px) {
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.burger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  position: relative;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+.burgerLine {
+  position: absolute;
+  inset: 50%;
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 2px;
+  background: $white;
+  border-radius: 2px;
+  transition: background 0.2s;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: $white;
+    border-radius: 2px;
+    transition: transform 0.25s, top 0.25s;
+  }
+
+  &::before {
+    top: -7px;
+  }
+
+  &::after {
+    top: 7px;
+  }
+}
+
+.burgerOpen {
+  background: transparent;
+
+  &::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+}
+
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: $black;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  padding: 2rem 3rem;
+  height: fit-content;
+}
+
+.mobileNavLink {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $white;
+  transition: color 0.2s;
+  text-align: center;
+
+  &:hover {
+    color: $gold;
+  }
 }
 
 .footer {
@@ -127,6 +238,14 @@ a {
   justify-content: center;
   color: $muted;
   font-size: 0.85rem;
+  padding: 0 1rem;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    height: auto;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
 }
 
 .btnInCart {
@@ -169,4 +288,11 @@ a {
   justify-content: center;
   transition: opacity 0.25s, transform 0.25s;
   z-index: 100;
+
+  @media (max-width: 480px) {
+    bottom: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
 }

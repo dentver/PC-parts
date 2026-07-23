@@ -10,6 +10,7 @@ import { LanguageSwitch } from './language-switch'
 import { CartProvider } from '@/context/cart-context'
 import { CartLink } from '@/components/cart-link'
 import { ScrollToTop } from '@/components/scroll-to-top'
+import { MobileNav } from '@/components/mobile-nav'
 import './globals.scss'
 import './variable.scss'
 
@@ -84,6 +85,7 @@ export default async function LocaleLayout({
                 </nav>
                 <LanguageSwitch locale={locale} />
                 <CartLink svgContent={CART_SVG} />
+                <MobileNav />
               </div>
             </header>
 
