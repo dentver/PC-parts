@@ -1,6 +1,7 @@
 # PC Parts
 
-Магазин компьютерных комплектующих. Работает на Next.js и Saleor (headless commerce).
+## URL для демонстрации
+https://pc-parts-iota.vercel.app/ru
 
 ## Стек
 

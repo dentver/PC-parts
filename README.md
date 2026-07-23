@@ -1,5 +1,8 @@
 # PC Parts
 
+## Demo URL
+https://pc-parts-iota.vercel.app/en
+
 An e-commerce store for computer components. Built with Next.js and Saleor headless commerce.
 
 ## Stack
