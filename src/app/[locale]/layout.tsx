@@ -8,9 +8,11 @@ import path from 'path'
 import { routing } from '@/i18n/routing'
 import { LanguageSwitch } from './language-switch'
 import { CartProvider } from '@/context/cart-context'
+import { SnackbarProvider } from '@/context/snackbar-context'
 import { CartLink } from '@/components/cart-link'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { MobileNav } from '@/components/mobile-nav'
+import { NavLinks } from '@/components/nav-links'
 import './globals.scss'
 import './variable.scss'
 
@@ -72,27 +74,32 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${unbounded.variable} ${rubik.variable} ${jetbrainsMono.variable}`} translate="no">
       <body>
         <NextIntlClientProvider messages={messages}>
-          <CartProvider>
-            <header className="header">
-              <div className="header-inner">
-                <Link href={`/${locale}`} className="logo">
-                  PC Parts
-                </Link>
-                <nav className="nav">
-                  <Link href={`/${locale}/catalog`}>{tnav('catalog')}</Link>
-                  <Link href={`/${locale}/builds`}>{tnav('builds')}</Link>
-                  <Link href={`/${locale}/compare`}>{tnav('compare')}</Link>
-                </nav>
-                <LanguageSwitch locale={locale} />
-                <CartLink svgContent={CART_SVG} />
-                <MobileNav />
-              </div>
-            </header>
+          <SnackbarProvider>
+            <CartProvider>
+              <header className="header">
+                <div className="header-inner">
+                  <Link href={`/${locale}`} className="logo">
+                    PC Parts
+                  </Link>
+                  <nav className="nav">
+                    <NavLinks
+                      locale={locale}
+                      catalogLabel={tnav('catalog')}
+                      buildsLabel={tnav('builds')}
+                      compareLabel={tnav('compare')}
+                    />
+                  </nav>
+                  <LanguageSwitch locale={locale} />
+                  <CartLink svgContent={CART_SVG} />
+                  <MobileNav />
+                </div>
+              </header>
 
-            <main className="main-content">
-              {children}
-            </main>
-          </CartProvider>
+              <main className="main-content">
+                {children}
+              </main>
+            </CartProvider>
+          </SnackbarProvider>
 
           <footer className="footer">
             <p>{tfooter('copyright')} — {tfooter('description')}</p>

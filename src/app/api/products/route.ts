@@ -7,10 +7,11 @@ export async function GET(req: NextRequest) {
   const after = searchParams.get('after') || null
   const category = searchParams.get('category') || null
   const sort = searchParams.get('sort') || null
+  const search = searchParams.get('q') || null
   const locale = searchParams.get('locale') || undefined
 
   try {
-    const result = await getProducts(first, after, category, sort, locale)
+    const result = await getProducts(first, after, category, sort, search, locale)
     return NextResponse.json(result)
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Failed to fetch products'

@@ -38,6 +38,29 @@
   color: $muted;
 }
 
+.search {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  background: $card;
+  color: $white;
+  outline: none;
+  min-height: 44px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 1rem;
+
+  &::placeholder {
+    color: $muted;
+  }
+
+  &:focus {
+    border-color: $gold;
+  }
+}
+
 .controls {
   display: flex;
   align-items: center;
@@ -69,6 +92,9 @@
   color: $muted;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 
   &:not(.pillActive):hover {
     border-color: $gold;
@@ -93,6 +119,7 @@
   color: $white;
   cursor: pointer;
   outline: none;
+  min-height: 44px;
 
   &:focus {
     border-color: $gold;
@@ -114,6 +141,21 @@
   }
 }
 
+.cardReveal {
+  animation: cardIn 0.4s ease-out both;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -122,10 +164,13 @@
   border: 1px solid $gray;
   border-radius: 14px;
   background: $card;
-  transition: border-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
 
   &:hover {
     border-color: $gold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
   }
 
   @media (max-width: 480px) {
@@ -175,7 +220,7 @@
   font-size: 0.8rem;
 
   @media (max-width: 480px) {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -222,10 +267,18 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     opacity: 0.85;
+  }
+
+  &:active {
+    transform: scale(0.97);
   }
 
   @media (max-width: 480px) {

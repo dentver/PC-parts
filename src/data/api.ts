@@ -187,23 +187,29 @@ export async function getProducts(
   after?: string | null,
   category?: string | null,
   sort?: string | null,
+  search?: string | null,
   locale?: string,
 ): Promise<{
   products: import('./types').Product[]
+  totalCount: number
   pageInfo: { hasNextPage: boolean; endCursor: string | null }
 }> {
   const vars: Record<string, unknown> = { channel: getChannelSlug(locale), first, after: after || null }
 
   const map = await getCategoryMap()
+  const filter: Record<string, unknown> = {}
   if (category) {
     const catId = map[category]
-    if (catId) vars.filter = { categories: [catId] }
+    if (catId) filter.categories = [catId]
   } else {
     const catIds = Object.entries(map)
       .filter(([slug]) => slug !== 'builds')
       .map(([, id]) => id)
-    vars.filter = { categories: catIds }
+    filter.categories = catIds
   }
+  const term = search?.trim()
+  if (term) filter.search = term
+  if (Object.keys(filter).length > 0) vars.filter = filter
 
   if (sort === 'price-asc') vars.sortBy = { field: 'PRICE', direction: 'ASC' }
   else if (sort === 'price-desc') vars.sortBy = { field: 'PRICE', direction: 'DESC' }
@@ -211,12 +217,14 @@ export async function getProducts(
   const data = await gql<{
     products: {
       edges: Array<{ cursor: string; node: SaleorProduct }>
+      totalCount: number
       pageInfo: { hasNextPage: boolean; endCursor: string | null }
     }
   }>(
     `query Products($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput, $sortBy: ProductOrder) {
       products(first: $first, after: $after, filter: $filter, sortBy: $sortBy, channel: $channel) {
         edges { cursor node { ${PRODUCT_FRAGMENT} } }
+        totalCount
         pageInfo { hasNextPage endCursor }
       }
     }`,
@@ -225,6 +233,7 @@ export async function getProducts(
 
   return {
     products: data.products.edges.map(e => mapProduct(e.node)),
+    totalCount: data.products.totalCount,
     pageInfo: data.products.pageInfo,
   }
 }

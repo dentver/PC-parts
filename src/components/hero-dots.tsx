@@ -22,8 +22,8 @@ export function HeroDots() {
     const maxRows = isMobile ? 12 : ROWS
     const result: Array<{ left: string; top: string; delay: string; duration: string }> = []
     let idx = 0
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < maxRows; r++) {
+      for (let c = 0; c < maxCols; c++) {
         const s1 = Math.sin((idx + 1) * 9301 + 49297)
         const s2 = Math.sin((idx + 1) * 7919 + 104729)
         const f1 = s1 - Math.floor(s1)
@@ -38,7 +38,7 @@ export function HeroDots() {
       }
     }
     return result
-  }, [])
+  }, [isMobile])
 
   return (
     <div className={styles.wrapper} aria-hidden="true">

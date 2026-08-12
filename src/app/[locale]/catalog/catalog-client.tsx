@@ -6,6 +6,7 @@ import { useRouter, usePathname, useParams } from 'next/navigation'
 import { CATEGORIES, CATEGORY_SPECS, type Product, type CategoryKey } from '@/data/types'
 import { formatPrice } from '@/data/format-price'
 import { AddToCartButton } from '@/components/add-to-cart-button'
+
 import styles from './catalog.module.scss'
 
 const CATEGORY_ORDER: CategoryKey[] = CATEGORIES.map(c => c.key)
@@ -37,11 +38,12 @@ async function fetchCatProducts(catKey: string, first: number, after?: string | 
   }>
 }
 
-async function fetchSimple(first: number, after?: string | null, category?: string | null, sort?: string | null, locale?: string) {
+async function fetchSimple(first: number, after?: string | null, category?: string | null, sort?: string | null, query?: string | null, locale?: string) {
   const params = new URLSearchParams({ first: String(first) })
   if (after) params.set('after', after)
   if (category) params.set('category', category)
   if (sort && sort !== 'default') params.set('sort', sort)
+  if (query) params.set('q', query)
   if (locale) params.set('locale', locale)
   const res = await fetch(`/api/products?${params}`)
   if (!res.ok) {
@@ -50,8 +52,17 @@ async function fetchSimple(first: number, after?: string | null, category?: stri
   }
   return res.json() as Promise<{
     products: Product[]
+    totalCount: number
     pageInfo: { hasNextPage: boolean; endCursor: string | null }
   }>
+}
+
+function buildParams(category: string | null, sort: string, query: string) {
+  const params = new URLSearchParams()
+  if (category) params.set('category', category)
+  if (sort !== 'default') params.set('sort', sort)
+  if (query) params.set('q', query)
+  return params
 }
 
 function buildVirtualCatalog(): number[] {
@@ -84,11 +95,13 @@ export function CatalogClient({
   categoryCounts,
   initialCategory = null,
   initialSort = null,
+  initialSearch = null,
 }: {
   initialTotal: number
   categoryCounts: Record<string, number>
   initialCategory?: string | null
   initialSort?: string | null
+  initialSearch?: string | null
 }) {
   const t = useTranslations()
   const router = useRouter()
@@ -103,6 +116,9 @@ export function CatalogClient({
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>(
     (initialSort as 'default' | 'price-asc' | 'price-desc') || 'default'
   )
+  const [searchInput, setSearchInput] = useState(initialSearch?.trim() || '')
+  const [query, setQuery] = useState(initialSearch?.trim() || '')
+  const [searchTotal, setSearchTotal] = useState<number | null>(null)
 
   const [simplePageInfo, setSimplePageInfo] = useState<{ hasNextPage: boolean; endCursor: string | null } | null>(null)
 
@@ -112,10 +128,24 @@ export function CatalogClient({
   const mountedRef = useRef(true)
   const catCountsRef = useRef(categoryCounts)
   catCountsRef.current = categoryCounts
+  const prevLocaleRef = useRef(locale)
 
   useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false } }, [])
 
-  const isAllMode = activeCategory === null && sortBy === 'default'
+  const isAllMode = activeCategory === null && sortBy === 'default' && !query
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const trimmed = searchInput.trim()
+      setQuery(trimmed)
+      const currentQ = new URLSearchParams(window.location.search).get('q') || ''
+      if (trimmed !== currentQ) {
+        router.replace(`${pathname}?${buildParams(activeCategory, sortBy, trimmed).toString()}`)
+      }
+    }, 300)
+    return () => clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchInput, activeCategory, sortBy, pathname, router])
 
   const clearRetry = useCallback(() => {
     if (retryRef.current) {
@@ -143,9 +173,10 @@ export function CatalogClient({
     setLoading(true)
     setConnecting(false)
     try {
-      const data = await fetchSimple(PAGE_SIZE, after, activeCategory, sortBy, locale)
+      const data = await fetchSimple(PAGE_SIZE, after, activeCategory, sortBy, query, locale)
       if (!mountedRef.current) return
       for (const p of data.products) productCache.set(p.id, p)
+      if (replace) setSearchTotal(query ? data.totalCount : null)
       setProductIds(prev => replace ? data.products.map(p => p.id) : [...prev, ...data.products.map(p => p.id)])
       setSimplePageInfo(data.pageInfo)
       setAllLoaded(!data.pageInfo.hasNextPage)
@@ -156,7 +187,7 @@ export function CatalogClient({
       loadingRef.current = false
       setLoading(false)
     }
-  }, [clearRetry, activeCategory, sortBy, startRetry, locale])
+  }, [clearRetry, activeCategory, sortBy, query, startRetry, locale])
 
   const doCategoryFetch = useCallback(async () => {
     if (loadingRef.current) return
@@ -216,8 +247,16 @@ export function CatalogClient({
   useEffect(() => {
     clearRetry()
     loadingRef.current = false
+
+    if (prevLocaleRef.current !== locale) {
+      productCache.clear()
+      catCache.clear()
+      prevLocaleRef.current = locale
+    }
+
     if (isAllMode) {
       setSimplePageInfo(null)
+      setSearchTotal(null)
       const assembled = buildVirtualCatalog()
       if (assembled.length > 0) {
         setProductIds(assembled)
@@ -236,7 +275,7 @@ export function CatalogClient({
     }
     return clearRetry
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAllMode, activeCategory, sortBy, locale])
+  }, [isAllMode, activeCategory, sortBy, query, locale])
 
   useEffect(() => {
     const el = triggerRef.current
@@ -246,8 +285,8 @@ export function CatalogClient({
         if (entries[0].isIntersecting && !allLoaded && !loadingRef.current && !connecting) {
           if (isAllMode) {
             doCategoryFetch()
-          } else {
-            doSimpleFetch(simplePageInfo?.endCursor)
+          } else if (simplePageInfo) {
+            doSimpleFetch(simplePageInfo.endCursor)
           }
         }
       },
@@ -266,9 +305,19 @@ export function CatalogClient({
       <div className={styles.inner}>
         <div className={styles.header}>
           <h1 className={styles.title}>{t('catalog.title')}</h1>
-          <p className={styles.count}>
-            {t('catalog.found', { count: currentCount })}
-          </p>
+          {(!query || searchTotal !== null) && (
+            <p className={styles.count}>
+              {t('catalog.found', { count: query ? searchTotal ?? 0 : currentCount })}
+            </p>
+          )}
+          <input
+            className={styles.search}
+            type="search"
+            placeholder={t('catalog.searchPlaceholder')}
+            aria-label={t('catalog.searchPlaceholder')}
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+          />
         </div>
 
         <div className={styles.controls}>
@@ -277,9 +326,7 @@ export function CatalogClient({
               className={`${styles.pill} ${activeCategory === null ? styles.pillActive : ''}`}
               onClick={() => {
                 setActiveCategory(null)
-                const params = new URLSearchParams()
-                if (sortBy !== 'default') params.set('sort', sortBy)
-                router.replace(`${pathname}?${params.toString()}`)
+                router.replace(`${pathname}?${buildParams(null, sortBy, query).toString()}`)
               }}
             >
               {t('catalog.all')}
@@ -290,10 +337,7 @@ export function CatalogClient({
                 className={`${styles.pill} ${activeCategory === cat.key ? styles.pillActive : ''}`}
                 onClick={() => {
                   setActiveCategory(cat.key)
-                  const params = new URLSearchParams()
-                  params.set('category', cat.key)
-                  if (sortBy !== 'default') params.set('sort', sortBy)
-                  router.replace(`${pathname}?${params.toString()}`)
+                  router.replace(`${pathname}?${buildParams(cat.key, sortBy, query).toString()}`)
                 }}
               >
                 {t(`categories.${cat.key}`)}
@@ -307,10 +351,7 @@ export function CatalogClient({
             onChange={e => {
               const value = e.target.value as typeof sortBy
               setSortBy(value)
-              const params = new URLSearchParams()
-              if (activeCategory) params.set('category', activeCategory)
-              if (value !== 'default') params.set('sort', value)
-              router.replace(`${pathname}?${params.toString()}`)
+              router.replace(`${pathname}?${buildParams(activeCategory, value, query).toString()}`)
             }}
           >
             <option value="default">{t('catalog.sortDefault')}</option>
@@ -320,8 +361,8 @@ export function CatalogClient({
         </div>
 
         <div className={styles.grid}>
-          {displayProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
+          {displayProducts.map((product, i) => (
+            <ProductCard key={product.id} product={product} index={i} />
           ))}
         </div>
 
@@ -333,7 +374,9 @@ export function CatalogClient({
         )}
 
         {!connecting && !loading && productIds.length === 0 && (
-          <p className={styles.empty}>{t('catalog.empty')}</p>
+          <p className={styles.empty}>
+            {query ? t('catalog.noResults', { query }) : t('catalog.empty')}
+          </p>
         )}
 
         {!connecting && loading && (
@@ -352,14 +395,14 @@ export function CatalogClient({
   )
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const t = useTranslations()
   const paramsHook = useParams()
   const locale = (paramsHook.locale as string) || 'en'
   const specKeys = CATEGORY_SPECS[product.categoryKey] || []
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${styles.cardReveal}`} style={{ animationDelay: `${(index % 12) * 0.04}s` }}>
       <span className={styles.badge}>
         {t(`categories.${product.categoryKey}`)}
       </span>

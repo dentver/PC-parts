@@ -57,11 +57,11 @@ export function CartClient() {
                       {formatPrice(item.price, locale)}
                     </span>
                     <div className={styles.quantity}>
-                      <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
+                      <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.uid, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
                       <span className={styles.qtyValue}>{item.quantity}</span>
-                      <button className={styles.qtyBtn} onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                      <button className={styles.qtyBtn} onClick={() => updateQuantity(item.uid, item.quantity + 1)}>+</button>
                     </div>
-                    <button className={styles.removeBtn} onClick={() => removeItem(item.id)}>{t('cart.remove')}</button>
+                    <button className={styles.removeBtn} onClick={() => removeItem(item.uid)}>{t('cart.remove')}</button>
                   </div>
                 </div>
               ))}
@@ -74,11 +74,11 @@ export function CartClient() {
                       {formatPrice(item.price, locale)}
                     </span>
                     <div className={styles.quantity}>
-                      <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
+                      <button className={`${styles.qtyBtn} ${item.quantity <= 1 ? styles.qtyBtnDisabled : ''}`} onClick={() => updateQuantity(item.uid, item.quantity - 1)} disabled={item.quantity <= 1}>&minus;</button>
                       <span className={styles.qtyValue}>{item.quantity}</span>
-                      <button className={styles.qtyBtn} onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                      <button className={styles.qtyBtn} onClick={() => updateQuantity(item.uid, item.quantity + 1)}>+</button>
                     </div>
-                    <button className={styles.removeBtn} onClick={() => removeItem(item.id)}>{t('cart.remove')}</button>
+                    <button className={styles.removeBtn} onClick={() => removeItem(item.uid)}>{t('cart.remove')}</button>
                   </div>
                 </div>
               ))}

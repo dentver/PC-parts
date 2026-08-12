@@ -45,6 +45,9 @@
   color: $muted;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 
   &:not(.pillActive):hover {
     border-color: $gold;
@@ -268,6 +271,11 @@
   padding: 0.3rem 0.75rem;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     border-color: $gold;

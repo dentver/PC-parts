@@ -3,7 +3,7 @@ import { CatalogClient } from './catalog-client'
 
 export default async function CatalogPage(props: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ category?: string; sort?: string }>
+  searchParams: Promise<{ category?: string; sort?: string; q?: string }>
 }) {
   const { locale } = await props.params
   const searchParams = await props.searchParams
@@ -17,6 +17,7 @@ export default async function CatalogPage(props: {
       categoryCounts={categoryCounts}
       initialCategory={searchParams.category ?? null}
       initialSort={searchParams.sort ?? null}
+      initialSearch={searchParams.q ?? null}
     />
   )
 }

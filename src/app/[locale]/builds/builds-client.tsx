@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { useCart } from '@/context/cart-context'
+import { useSnackbar } from '@/context/snackbar-context'
 import { CATEGORY_SPECS } from '@/data/types'
 import { formatPrice } from '@/data/format-price'
 import type { Build } from '@/data/types'
@@ -15,6 +16,7 @@ let cachedBuilds: Build[] | null = null
 export function BuildsClient() {
   const t = useTranslations()
   const cart = useCart()
+  const { showSnackbar } = useSnackbar()
   const params = useParams()
   const locale = (params.locale as string) || 'en'
   const [builds, setBuilds] = useState<Build[]>(cachedBuilds ?? [])
@@ -56,10 +58,10 @@ export function BuildsClient() {
       <div className={styles.inner}>
         <h1 className={styles.title}>{t('builds.title')}</h1>
         <div className={styles.grid}>
-          {builds.map(build => {
+          {builds.map((build, i) => {
             const formattedPrice = formatPrice(build.totalPrice, locale)
             return (
-              <div key={build.slug} className={styles.card}>
+              <div key={build.slug} className={`${styles.card} ${styles.cardReveal}`} style={{ animationDelay: `${i * 0.06}s` }}>
                 <h2 className={styles.buildName}>{t(`builds.${build.slug}`)}</h2>
                 <p className={styles.buildDesc}>{t(`builds.${build.slug}Desc`)}</p>
                 <div className={styles.componentsPreview}>
@@ -139,6 +141,7 @@ export function BuildsClient() {
                       role: c.role,
                     })),
                   })
+                  showSnackbar(`${selected.name} — ${t('catalog.addedToCart')}`)
                   setSelected(null)
                 }}
               >

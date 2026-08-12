@@ -18,7 +18,14 @@
   width: 2.4px;
   height: 2.4px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-gold);
   opacity: 0;
   animation: twinkle ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+    opacity: 0.15;
+  }
 }

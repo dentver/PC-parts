@@ -177,7 +177,8 @@
   border: none;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
-  min-height: 36px;
+  min-height: 44px;
+  min-width: 44px;
 
   &:hover {
     background: $gold;
@@ -202,8 +203,11 @@
   padding: 0.4rem 0.8rem;
   border-left: 1px solid $gray;
   border-right: 1px solid $gray;
-  min-width: 2.5rem;
-  text-align: center;
+  min-width: 3rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .removeBtn {
@@ -216,6 +220,9 @@
   padding: 0.35rem 0.75rem;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 
   &:hover {
     border-color: $gold;

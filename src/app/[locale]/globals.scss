@@ -2,13 +2,18 @@
 
 :root {
   --color-gold: #d29f22;
-  --color-muted: #b8a86a;
+  --color-muted: #9ca3af;
   --color-gray: #252628;
-  --color-white: #ffd381;
+  --color-white: #e8e6e3;
   --color-green: #4caf50;
   --color-bright-red: #ef5350;
   --color-black: #000;
   --color-card: lab(7.10513% 1.15619 -5.39807);
+  --color-surface-elevated: lab(12% 1.5 -4);
+}
+
+html {
+  font-size: 16px;
 }
 
 *,
@@ -21,7 +26,7 @@
 
 body {
   background: $black;
-  color: $white;
+  color: var(--color-white);
   font-family: var(--font-body), system-ui, sans-serif;
   min-height: 100vh;
   display: flex;
@@ -33,12 +38,23 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 2px solid $gold;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+button:focus-visible {
+  outline: 2px solid $gold;
+  outline-offset: 2px;
+}
+
 .main-content {
   flex: 1;
 }
 
 .header {
-  border-bottom: 1px solid $gray;
+  border-bottom: 1px solid var(--color-gray);
 }
 
 .header-inner {
@@ -72,11 +88,14 @@ a {
     position: relative;
     font-size: 0.9rem;
     transition: color 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 
     &::after {
       content: '';
       position: absolute;
-      bottom: -4px;
+      bottom: 0;
       left: 0;
       width: 100%;
       height: 2px;
@@ -95,6 +114,14 @@ a {
     }
   }
 
+  a[aria-current="page"] {
+    color: $gold;
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
   @media (max-width: 768px) {
     display: none;
   }
@@ -106,6 +133,9 @@ a {
   letter-spacing: 0.05em;
   transition: color 0.2s;
   margin-left: auto;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 
   &:hover {
     color: $gold;
@@ -116,6 +146,9 @@ a {
   display: flex;
   align-items: center;
   transition: color 0.2s;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
 
   svg {
     width: 26px;
@@ -141,23 +174,23 @@ a {
   background: none;
   border: none;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   position: relative;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 768px) {
-    display: block;
+    display: flex;
   }
 }
 
 .burgerLine {
-  position: absolute;
-  inset: 50%;
-  transform: translate(-50%, -50%);
   width: 22px;
   height: 2px;
-  background: $white;
+  background: var(--color-white);
   border-radius: 2px;
+  position: relative;
   transition: background 0.2s;
 
   &::before,
@@ -167,7 +200,7 @@ a {
     left: 0;
     width: 100%;
     height: 2px;
-    background: $white;
+    background: var(--color-white);
     border-radius: 2px;
     transition: transform 0.25s, top 0.25s;
   }
@@ -199,7 +232,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   padding-top: 5rem;
@@ -211,7 +244,7 @@ a {
   align-items: center;
   gap: 1rem;
   background: $black;
-  border: 1px solid $gray;
+  border: 1px solid var(--color-gray);
   border-radius: 14px;
   padding: 2rem 3rem;
   height: fit-content;
@@ -221,9 +254,12 @@ a {
   font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: 600;
-  color: $white;
+  color: var(--color-white);
   transition: color 0.2s;
   text-align: center;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 
   &:hover {
     color: $gold;
@@ -231,12 +267,12 @@ a {
 }
 
 .footer {
-  border-top: 1px solid $gray;
+  border-top: 1px solid var(--color-gray);
   height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $muted;
+  color: var(--color-muted);
   font-size: 0.85rem;
   padding: 0 1rem;
   text-align: center;
@@ -247,6 +283,8 @@ a {
     font-size: 0.75rem;
   }
 }
+
+// ─── Button styles ─────────────────────────────────────────
 
 .btnInCart {
   background: transparent !important;
@@ -292,7 +330,122 @@ a {
   @media (max-width: 480px) {
     bottom: 1rem;
     right: 1rem;
-    width: 40px;
-    height: 40px;
+  }
+}
+
+// ─── Card shadow ────────────────────────────────────────────
+
+%cardShadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+// ─── Snackbar ────────────────────────────────────────────────
+
+.snackbarContainer {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.snackbar {
+  pointer-events: auto;
+  background: $gold;
+  color: $black;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  animation: snackbar-in 0.25s ease-out;
+  white-space: nowrap;
+}
+
+@keyframes snackbar-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// ─── Breadcrumbs ────────────────────────────────────────────
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+
+  a:hover {
+    color: $gold;
+  }
+}
+
+.breadcrumbSep {
+  color: var(--color-gray);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-white);
+}
+
+// ─── In-view reveal animation ──────────────────────────────
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.revealVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ─── Reduced motion ─────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal,
+  .revealVisible {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

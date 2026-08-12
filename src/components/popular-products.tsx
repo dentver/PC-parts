@@ -16,6 +16,8 @@ export function PopularProducts() {
   const [connecting, setConnecting] = useState(true)
   const loadingRef = useRef(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const retryCountRef = useRef(0)
+  const MAX_RETRIES = 12
 
   useEffect(() => {
     let cancelled = false
@@ -32,10 +34,12 @@ export function PopularProducts() {
         if (!cancelled) {
           setProducts(data.products || [])
           setConnecting(false)
+          retryCountRef.current = 0
         }
       } catch {
         if (!cancelled) {
           setConnecting(true)
+          retryCountRef.current++
         }
       } finally {
         loadingRef.current = false
@@ -45,7 +49,7 @@ export function PopularProducts() {
     async function poll() {
       if (cancelled) return
       await load()
-      if (!cancelled) {
+      if (!cancelled && retryCountRef.current < MAX_RETRIES) {
         timerRef.current = setTimeout(poll, 5000)
       }
     }

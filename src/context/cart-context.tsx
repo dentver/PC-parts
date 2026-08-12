@@ -11,6 +11,7 @@ export interface CartComponent {
 }
 
 export interface CartItem {
+  uid: string
   id: number
   name: string
   categoryKey: string
@@ -21,9 +22,9 @@ export interface CartItem {
 
 interface CartContextValue {
   items: CartItem[]
-  addItem: (item: Omit<CartItem, 'quantity'>) => void
-  removeItem: (id: number) => void
-  updateQuantity: (id: number, quantity: number) => void
+  addItem: (item: Omit<CartItem, 'quantity' | 'uid'>) => void
+  removeItem: (uid: string) => void
+  updateQuantity: (uid: string, quantity: number) => void
   clearCart: () => void
   totalItems: number
   totalPrice: number
@@ -57,26 +58,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items, loaded])
 
-  const addItem = useCallback((item: Omit<CartItem, 'quantity'>) => {
+  const addItem = useCallback((item: Omit<CartItem, 'quantity' | 'uid'>) => {
+    const uid = `${item.categoryKey}-${item.id}`
     setItems(prev => {
-      const existing = prev.find(i => i.id === item.id)
+      const existing = prev.find(i => i.uid === uid)
       if (existing) {
         return prev.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.uid === uid ? { ...i, quantity: i.quantity + 1 } : i
         )
       }
-      return [...prev, { ...item, quantity: 1 }]
+      return [...prev, { ...item, uid, quantity: 1 }]
     })
   }, [])
 
-  const removeItem = useCallback((id: number) => {
-    setItems(prev => prev.filter(i => i.id !== id))
+  const removeItem = useCallback((uid: string) => {
+    setItems(prev => prev.filter(i => i.uid !== uid))
   }, [])
 
-  const updateQuantity = useCallback((id: number, quantity: number) => {
+  const updateQuantity = useCallback((uid: string, quantity: number) => {
     if (quantity < 1) return
     setItems(prev => prev.map(i =>
-      i.id === id ? { ...i, quantity } : i
+      i.uid === uid ? { ...i, quantity } : i
     ))
   }, [])
 
