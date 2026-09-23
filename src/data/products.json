@@ -1,0 +1,596 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "slug": "pc-1-amd-ryzen-5-5600",
+      "name": "AMD Ryzen 5 5600",
+      "categoryKey": "processors",
+      "price": 8990,
+      "specs": [
+        { "key": "cores", "value": "6" },
+        { "key": "threads", "value": "12" },
+        { "key": "baseFreq", "value": "3.5 ГГц" },
+        { "key": "l3Cache", "value": "32 МБ" },
+        { "key": "maxFreq", "value": "4.4 ГГц" }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "pc-2-amd-ryzen-5-7600",
+      "name": "AMD Ryzen 5 7600",
+      "categoryKey": "processors",
+      "price": 16990,
+      "specs": [
+        { "key": "cores", "value": "6" },
+        { "key": "threads", "value": "12" },
+        { "key": "baseFreq", "value": "3.8 ГГц" },
+        { "key": "l3Cache", "value": "32 МБ" },
+        { "key": "maxFreq", "value": "5.1 ГГц" }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "pc-3-intel-core-i5-14400f",
+      "name": "Intel Core i5-14400F",
+      "categoryKey": "processors",
+      "price": 15990,
+      "specs": [
+        { "key": "cores", "value": "10" },
+        { "key": "threads", "value": "16" },
+        { "key": "baseFreq", "value": "2.5 ГГц" },
+        { "key": "l3Cache", "value": "20 МБ" },
+        { "key": "maxFreq", "value": "4.7 ГГц" }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "pc-4-amd-ryzen-7-7800x3d",
+      "name": "AMD Ryzen 7 7800X3D",
+      "categoryKey": "processors",
+      "price": 34990,
+      "specs": [
+        { "key": "cores", "value": "8" },
+        { "key": "threads", "value": "16" },
+        { "key": "baseFreq", "value": "4.2 ГГц" },
+        { "key": "l3Cache", "value": "96 МБ" },
+        { "key": "maxFreq", "value": "5.0 ГГц" }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "pc-5-intel-core-i9-14900k",
+      "name": "Intel Core i9-14900K",
+      "categoryKey": "processors",
+      "price": 49990,
+      "specs": [
+        { "key": "cores", "value": "24" },
+        { "key": "threads", "value": "32" },
+        { "key": "baseFreq", "value": "3.2 ГГц" },
+        { "key": "l3Cache", "value": "36 МБ" },
+        { "key": "maxFreq", "value": "6.0 ГГц" }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "pc-6-amd-ryzen-9-7950x",
+      "name": "AMD Ryzen 9 7950X",
+      "categoryKey": "processors",
+      "price": 54990,
+      "specs": [
+        { "key": "cores", "value": "16" },
+        { "key": "threads", "value": "32" },
+        { "key": "baseFreq", "value": "4.5 ГГц" },
+        { "key": "l3Cache", "value": "64 МБ" },
+        { "key": "maxFreq", "value": "5.7 ГГц" }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "pc-7-geforce-rtx-4060-8gb",
+      "name": "NVIDIA GeForce RTX 4060 8 ГБ",
+      "categoryKey": "videoCards",
+      "price": 32990,
+      "specs": [
+        { "key": "memory", "value": "8 ГБ" },
+        { "key": "boostClock", "value": "2460 МГц" },
+        { "key": "cudaCores", "value": "3584" },
+        { "key": "tdp", "value": "115 Вт" }
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "pc-8-geforce-rtx-4060-ti-16gb",
+      "name": "NVIDIA GeForce RTX 4060 Ti 16 ГБ",
+      "categoryKey": "videoCards",
+      "price": 47990,
+      "specs": [
+        { "key": "memory", "value": "16 ГБ" },
+        { "key": "boostClock", "value": "2535 МГц" },
+        { "key": "cudaCores", "value": "4352" },
+        { "key": "tdp", "value": "165 Вт" }
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "pc-9-geforce-rtx-4070-super-12gb",
+      "name": "NVIDIA GeForce RTX 4070 SUPER 12 ГБ",
+      "categoryKey": "videoCards",
+      "price": 69990,
+      "specs": [
+        { "key": "memory", "value": "12 ГБ" },
+        { "key": "boostClock", "value": "2475 МГц" },
+        { "key": "cudaCores", "value": "7168" },
+        { "key": "tdp", "value": "220 Вт" }
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "pc-10-geforce-rtx-4080-super-16gb",
+      "name": "NVIDIA GeForce RTX 4080 SUPER 16 ГБ",
+      "categoryKey": "videoCards",
+      "price": 119990,
+      "specs": [
+        { "key": "memory", "value": "16 ГБ" },
+        { "key": "boostClock", "value": "2550 МГц" },
+        { "key": "cudaCores", "value": "10240" },
+        { "key": "tdp", "value": "320 Вт" }
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "pc-11-geforce-rtx-4090-24gb",
+      "name": "NVIDIA GeForce RTX 4090 24 ГБ",
+      "categoryKey": "videoCards",
+      "price": 199990,
+      "specs": [
+        { "key": "memory", "value": "24 ГБ" },
+        { "key": "boostClock", "value": "2520 МГц" },
+        { "key": "cudaCores", "value": "16384" },
+        { "key": "tdp", "value": "450 Вт" }
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "pc-12-radeon-rx-7800-xt-16gb",
+      "name": "AMD Radeon RX 7800 XT 16 ГБ",
+      "categoryKey": "videoCards",
+      "price": 54990,
+      "specs": [
+        { "key": "memory", "value": "16 ГБ" },
+        { "key": "boostClock", "value": "2430 МГц" },
+        { "key": "cudaCores", "value": "3840" },
+        { "key": "tdp", "value": "263 Вт" }
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "pc-13-msi-b550m-pro-vdh-wifi",
+      "name": "MSI B550M PRO-VDH WiFi",
+      "categoryKey": "motherboards",
+      "price": 9990,
+      "specs": [
+        { "key": "socket", "value": "AM4" },
+        { "key": "chipset", "value": "B550" },
+        { "key": "ramSlots", "value": "4" },
+        { "key": "wifi", "value": "Да" }
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "pc-14-asus-tuf-gaming-b650-plus-wifi",
+      "name": "ASUS TUF Gaming B650-PLUS WiFi",
+      "categoryKey": "motherboards",
+      "price": 18990,
+      "specs": [
+        { "key": "socket", "value": "AM5" },
+        { "key": "chipset", "value": "B650" },
+        { "key": "ramSlots", "value": "4" },
+        { "key": "wifi", "value": "Да" }
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "pc-15-gigabyte-b760m-ds3h-ddr4",
+      "name": "Gigabyte B760M DS3H DDR4",
+      "categoryKey": "motherboards",
+      "price": 11990,
+      "specs": [
+        { "key": "socket", "value": "LGA 1700" },
+        { "key": "chipset", "value": "B760" },
+        { "key": "ramSlots", "value": "4" },
+        { "key": "wifi", "value": "Нет" }
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "pc-16-asus-rog-strix-z790-a",
+      "name": "ASUS ROG STRIX Z790-A Gaming WiFi",
+      "categoryKey": "motherboards",
+      "price": 34990,
+      "specs": [
+        { "key": "socket", "value": "LGA 1700" },
+        { "key": "chipset", "value": "Z790" },
+        { "key": "ramSlots", "value": "4" },
+        { "key": "wifi", "value": "Да" }
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "pc-17-msi-mag-x670e-tomahawk-wifi",
+      "name": "MSI MAG X670E TOMAHAWK WiFi",
+      "categoryKey": "motherboards",
+      "price": 32990,
+      "specs": [
+        { "key": "socket", "value": "AM5" },
+        { "key": "chipset", "value": "X670E" },
+        { "key": "ramSlots", "value": "4" },
+        { "key": "wifi", "value": "Да" }
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "pc-18-asus-rog-strix-b760-i",
+      "name": "ASUS ROG STRIX B760-I Gaming WiFi",
+      "categoryKey": "motherboards",
+      "price": 21990,
+      "specs": [
+        { "key": "socket", "value": "LGA 1700" },
+        { "key": "chipset", "value": "B760" },
+        { "key": "ramSlots", "value": "2" },
+        { "key": "wifi", "value": "Да" }
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "pc-19-kingston-fury-beast-16gb-ddr4-3200",
+      "name": "Kingston FURY Beast 16 ГБ (2×8) DDR4-3200",
+      "categoryKey": "ram",
+      "price": 3990,
+      "specs": [
+        { "key": "type", "value": "DDR4-3200" },
+        { "key": "capacity", "value": "16 ГБ (2×8 ГБ)" },
+        { "key": "latency", "value": "CL16" },
+        { "key": "voltage", "value": "1.35 В" }
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "pc-20-kingston-fury-beast-32gb-ddr4-3600",
+      "name": "Kingston FURY Beast 32 ГБ (2×16) DDR4-3600",
+      "categoryKey": "ram",
+      "price": 6990,
+      "specs": [
+        { "key": "type", "value": "DDR4-3600" },
+        { "key": "capacity", "value": "32 ГБ (2×16 ГБ)" },
+        { "key": "latency", "value": "CL18" },
+        { "key": "voltage", "value": "1.35 В" }
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "pc-21-kingston-fury-beast-32gb-ddr5-6000",
+      "name": "Kingston FURY Beast 32 ГБ (2×16) DDR5-6000",
+      "categoryKey": "ram",
+      "price": 11990,
+      "specs": [
+        { "key": "type", "value": "DDR5-6000" },
+        { "key": "capacity", "value": "32 ГБ (2×16 ГБ)" },
+        { "key": "latency", "value": "CL36" },
+        { "key": "voltage", "value": "1.35 В" }
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "pc-22-corsair-vengeance-64gb-ddr5-6000",
+      "name": "Corsair Vengeance 64 ГБ (2×32) DDR5-6000",
+      "categoryKey": "ram",
+      "price": 22990,
+      "specs": [
+        { "key": "type", "value": "DDR5-6000" },
+        { "key": "capacity", "value": "64 ГБ (2×32 ГБ)" },
+        { "key": "latency", "value": "CL30" },
+        { "key": "voltage", "value": "1.35 В" }
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "pc-23-adata-xpg-lancer-32gb-ddr5-5600",
+      "name": "XPG Lancer Blade 32 ГБ (2×16) DDR5-5600",
+      "categoryKey": "ram",
+      "price": 9990,
+      "specs": [
+        { "key": "type", "value": "DDR5-5600" },
+        { "key": "capacity", "value": "32 ГБ (2×16 ГБ)" },
+        { "key": "latency", "value": "CL36" },
+        { "key": "voltage", "value": "1.25 В" }
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "pc-24-gskill-trident-z5-64gb-ddr5-6400",
+      "name": "G.Skill Trident Z5 64 ГБ (2×32) DDR5-6400",
+      "categoryKey": "ram",
+      "price": 26990,
+      "specs": [
+        { "key": "type", "value": "DDR5-6400" },
+        { "key": "capacity", "value": "64 ГБ (2×32 ГБ)" },
+        { "key": "latency", "value": "CL32" },
+        { "key": "voltage", "value": "1.4 В" }
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "pc-25-kingston-nv2-1tb",
+      "name": "Kingston NV2 1 ТБ",
+      "categoryKey": "storage",
+      "price": 5990,
+      "specs": [
+        { "key": "capacity", "value": "1 ТБ" },
+        { "key": "interface", "value": "NVMe" },
+        { "key": "readSpeed", "value": "3500 МБ/с" },
+        { "key": "writeSpeed", "value": "2100 МБ/с" }
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "pc-26-samsung-990-pro-2tb",
+      "name": "Samsung 990 PRO 2 ТБ",
+      "categoryKey": "storage",
+      "price": 14990,
+      "specs": [
+        { "key": "capacity", "value": "2 ТБ" },
+        { "key": "interface", "value": "NVMe" },
+        { "key": "readSpeed", "value": "7450 МБ/с" },
+        { "key": "writeSpeed", "value": "6900 МБ/с" }
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "pc-27-wd-black-sn850x-4tb",
+      "name": "WD Black SN850X 4 ТБ",
+      "categoryKey": "storage",
+      "price": 26990,
+      "specs": [
+        { "key": "capacity", "value": "4 ТБ" },
+        { "key": "interface", "value": "NVMe" },
+        { "key": "readSpeed", "value": "7300 МБ/с" },
+        { "key": "writeSpeed", "value": "6600 МБ/с" }
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "pc-28-kingston-a400-1tb-sata",
+      "name": "Kingston A400 1 ТБ",
+      "categoryKey": "storage",
+      "price": 4990,
+      "specs": [
+        { "key": "capacity", "value": "1 ТБ" },
+        { "key": "interface", "value": "SATA" },
+        { "key": "readSpeed", "value": "500 МБ/с" },
+        { "key": "writeSpeed", "value": "450 МБ/с" }
+      ]
+    },
+    {
+      "id": 29,
+      "slug": "pc-29-deepcool-pk550d",
+      "name": "DeepCool PK550D 550 Вт",
+      "categoryKey": "powerSupplies",
+      "price": 4990,
+      "specs": [
+        { "key": "wattage", "value": "550 Вт" },
+        { "key": "formFactor", "value": "ATX" },
+        { "key": "modular", "value": "Нет" },
+        { "key": "efficiency", "value": "80 Plus Bronze" }
+      ]
+    },
+    {
+      "id": 30,
+      "slug": "pc-30-corsair-sf650",
+      "name": "Corsair SF650 650 Вт",
+      "categoryKey": "powerSupplies",
+      "price": 9990,
+      "specs": [
+        { "key": "wattage", "value": "650 Вт" },
+        { "key": "formFactor", "value": "SFX" },
+        { "key": "modular", "value": "Полная" },
+        { "key": "efficiency", "value": "80 Plus Gold" }
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "pc-31-msi-mag-a750gl",
+      "name": "MSI MAG A750GL 750 Вт",
+      "categoryKey": "powerSupplies",
+      "price": 8990,
+      "specs": [
+        { "key": "wattage", "value": "750 Вт" },
+        { "key": "formFactor", "value": "ATX" },
+        { "key": "modular", "value": "Полная" },
+        { "key": "efficiency", "value": "80 Plus Gold" }
+      ]
+    },
+    {
+      "id": 32,
+      "slug": "pc-32-be-quiet-dark-power-850",
+      "name": "be quiet! Dark Power 13 850 Вт",
+      "categoryKey": "powerSupplies",
+      "price": 11990,
+      "specs": [
+        { "key": "wattage", "value": "850 Вт" },
+        { "key": "formFactor", "value": "ATX" },
+        { "key": "modular", "value": "Полная" },
+        { "key": "efficiency", "value": "80 Plus Titanium" }
+      ]
+    },
+    {
+      "id": 33,
+      "slug": "pc-33-corsair-rm1000x",
+      "name": "Corsair RM1000x 1000 Вт",
+      "categoryKey": "powerSupplies",
+      "price": 16990,
+      "specs": [
+        { "key": "wattage", "value": "1000 Вт" },
+        { "key": "formFactor", "value": "ATX" },
+        { "key": "modular", "value": "Полная" },
+        { "key": "efficiency", "value": "80 Plus Gold" }
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "pc-34-deepcool-matrexx-40",
+      "name": "DeepCool MATREXX 40 3FS",
+      "categoryKey": "cases",
+      "price": 3990,
+      "specs": [
+        { "key": "formFactor", "value": "Mini-Tower" },
+        { "key": "motherboardSupport", "value": "microATX, Mini-ITX" },
+        { "key": "fanSupport", "value": "3" },
+        { "key": "driveBays", "value": "2" }
+      ]
+    },
+    {
+      "id": 35,
+      "slug": "pc-35-deepcool-ch510",
+      "name": "DeepCool CH510",
+      "categoryKey": "cases",
+      "price": 5990,
+      "specs": [
+        { "key": "formFactor", "value": "Mid-Tower" },
+        { "key": "motherboardSupport", "value": "ATX, microATX, Mini-ITX" },
+        { "key": "fanSupport", "value": "4" },
+        { "key": "driveBays", "value": "2" }
+      ]
+    },
+    {
+      "id": 36,
+      "slug": "pc-36-fractal-design-north",
+      "name": "Fractal Design North",
+      "categoryKey": "cases",
+      "price": 12990,
+      "specs": [
+        { "key": "formFactor", "value": "Mid-Tower" },
+        { "key": "motherboardSupport", "value": "ATX, microATX, Mini-ITX" },
+        { "key": "fanSupport", "value": "5" },
+        { "key": "driveBays", "value": "2" }
+      ]
+    },
+    {
+      "id": 37,
+      "slug": "pc-37-lian-li-o11d-evo",
+      "name": "Lian Li O11 Dynamic EVO",
+      "categoryKey": "cases",
+      "price": 16990,
+      "specs": [
+        { "key": "formFactor", "value": "Full-Tower" },
+        { "key": "motherboardSupport", "value": "E-ATX, ATX, microATX, Mini-ITX" },
+        { "key": "fanSupport", "value": "6" },
+        { "key": "driveBays", "value": "4" }
+      ]
+    },
+    {
+      "id": 38,
+      "slug": "pc-38-cooler-master-nr200p",
+      "name": "Cooler Master NR200P",
+      "categoryKey": "cases",
+      "price": 7990,
+      "specs": [
+        { "key": "formFactor", "value": "Mini-ITX" },
+        { "key": "motherboardSupport", "value": "Mini-ITX" },
+        { "key": "fanSupport", "value": "2" },
+        { "key": "driveBays", "value": "1" }
+      ]
+    }
+  ],
+  "builds": [
+    {
+      "id": 1,
+      "slug": "budget",
+      "name": "StartLine",
+      "description": "Сборка для повседневных задач и лёгких игр по доступной цене",
+      "components": [
+        { "role": "buildProcessor", "productId": 1 },
+        { "role": "buildVideoCard", "productId": 7 },
+        { "role": "buildMotherboard", "productId": 13 },
+        { "role": "buildRam", "productId": 19 },
+        { "role": "buildStorage", "productId": 25 },
+        { "role": "buildPowerSupply", "productId": 29 },
+        { "role": "buildCase", "productId": 34 }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "gaming",
+      "name": "GameForce",
+      "description": "Сбалансированная сборка для игр в высоком разрешении",
+      "components": [
+        { "role": "buildProcessor", "productId": 2 },
+        { "role": "buildVideoCard", "productId": 9 },
+        { "role": "buildMotherboard", "productId": 14 },
+        { "role": "buildRam", "productId": 21 },
+        { "role": "buildStorage", "productId": 26 },
+        { "role": "buildPowerSupply", "productId": 31 },
+        { "role": "buildCase", "productId": 35 }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "ai",
+      "name": "TensorMax",
+      "description": "Мощная сборка для обучения и запуска локальных ИИ моделей",
+      "components": [
+        { "role": "buildProcessor", "productId": 6 },
+        { "role": "buildVideoCard", "productId": 11 },
+        { "role": "buildMotherboard", "productId": 17 },
+        { "role": "buildRam", "productId": 24 },
+        { "role": "buildStorage", "productId": 27 },
+        { "role": "buildPowerSupply", "productId": 33 },
+        { "role": "buildCase", "productId": 37 }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "workstation",
+      "name": "RenderPro",
+      "description": "Сборка для рендеринга, монтажа и тяжёлых рабочих задач",
+      "components": [
+        { "role": "buildProcessor", "productId": 5 },
+        { "role": "buildVideoCard", "productId": 10 },
+        { "role": "buildMotherboard", "productId": 16 },
+        { "role": "buildRam", "productId": 22 },
+        { "role": "buildStorage", "productId": 27 },
+        { "role": "buildPowerSupply", "productId": 32 },
+        { "role": "buildCase", "productId": 36 }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "compact",
+      "name": "SlimBox",
+      "description": "Небольшая сборка в формате Mini-ITX без потери производительности",
+      "components": [
+        { "role": "buildProcessor", "productId": 3 },
+        { "role": "buildVideoCard", "productId": 8 },
+        { "role": "buildMotherboard", "productId": 18 },
+        { "role": "buildRam", "productId": 23 },
+        { "role": "buildStorage", "productId": 25 },
+        { "role": "buildPowerSupply", "productId": 30 },
+        { "role": "buildCase", "productId": 38 }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "flagship",
+      "name": "Apex",
+      "description": "Максимальная производительность для игр и тяжёлых нагрузок",
+      "components": [
+        { "role": "buildProcessor", "productId": 4 },
+        { "role": "buildVideoCard", "productId": 11 },
+        { "role": "buildMotherboard", "productId": 14 },
+        { "role": "buildRam", "productId": 21 },
+        { "role": "buildStorage", "productId": 26 },
+        { "role": "buildPowerSupply", "productId": 32 },
+        { "role": "buildCase", "productId": 36 }
+      ]
+    }
+  ]
+}

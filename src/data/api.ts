@@ -1,105 +1,74 @@
-const API = process.env.SALEOR_API_URL || ''
-const TOKEN = process.env.SALEOR_API_TOKEN || ''
+import raw from './products.json'
+import type { Product, Spec, Build, BuildComponent } from './types'
 
-function getChannelSlug(locale?: string): string {
-  return locale === 'ru' ? 'channel-rub' : 'default-channel'
-}
+const RUB_USD_RATE = 92
 
-async function gql<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const res = await fetch(API, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${TOKEN}`,
-        },
-        body: JSON.stringify({ query, variables }),
-        signal: AbortSignal.timeout(15000),
-      })
-      if (!res.ok) {
-        const text = await res.text()
-        throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`)
-      }
-      const json = await res.json()
-      if (json.errors) {
-        const msgs = json.errors.map((e: { message: string }) => e.message).join('; ')
-        throw new Error(`GraphQL: ${msgs}`)
-      }
-      return json.data as T
-    } catch (err) {
-      if (attempt === 2) throw err
-      await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)))
-    }
-  }
-  throw new Error('unreachable')
-}
-
-interface SaleorProduct {
-  id: string
-  name: string
+interface JsonProduct {
+  id: number
   slug: string
-  category: { id: string; slug: string } | null
-  attributes: Array<{
-    attribute: { slug: string }
-    values: Array<{ name: string }>
-  }>
-  variants: Array<{
-    id: string
-    pricing: {
-      price: { gross: { amount: number } } | null
-    } | null
-  }>
+  name: string
+  categoryKey: string
+  price: number
+  specs: Spec[]
 }
 
-function parseIdFromSlug(slug: string): number {
-  const m = slug.match(/^pc-(\d+)-/)
-  return m ? parseInt(m[1]) : 0
+interface JsonBuildComponent {
+  role: string
+  productId: number
 }
 
-function mapProduct(node: SaleorProduct): import('./types').Product {
+interface JsonBuild {
+  id: number
+  slug: string
+  name: string
+  description?: string
+  components: JsonBuildComponent[]
+}
+
+const data = raw as { products: JsonProduct[]; builds: JsonBuild[] }
+
+// ─── Price conversion (JSON prices are stored in RUB) ───────────
+
+export function toPrice(rub: number, locale?: string): number {
+  return locale === 'ru' ? rub : Math.round(rub / RUB_USD_RATE)
+}
+
+function toProduct(p: JsonProduct, locale?: string): Product {
   return {
-    id: parseIdFromSlug(node.slug),
-    name: node.name,
-    categoryKey: node.category?.slug ?? '',
-    price: Math.round(node.variants?.[0]?.pricing?.price?.gross?.amount ?? 0),
-    specs: node.attributes
-      .filter(a => a.values?.length)
-      .map(a => ({ key: a.attribute.slug, value: a.values[0].name })),
+    id: p.id,
+    name: p.name,
+    categoryKey: p.categoryKey,
+    price: toPrice(p.price, locale),
+    specs: p.specs,
   }
 }
 
-const PRODUCT_FRAGMENT = `
-  id name slug
-  category { id slug }
-  attributes {
-    attribute { slug }
-    values { name }
-  }
-  variants {
-    id
-    pricing { price { gross { amount } } }
-  }
-`
-
-// ─── Category map ──────────────────────────────────────────────
-
-let catMap: Record<string, string> | null = null
-
-async function getCategoryMap(): Promise<Record<string, string>> {
-  if (catMap) return catMap
-  const data = await gql<{ categories: { edges: Array<{ node: { id: string; slug: string } }> } }>(
-    `query { categories(first: 20) { edges { node { id slug } } } }`
-  )
-  const map: Record<string, string> = {}
-  for (const { node } of data.categories.edges) {
-    map[node.slug] = node.id
-  }
-  catMap = map
-  return map
+function parseCursor(after?: string | null): number {
+  const n = after ? parseInt(after, 10) : 0
+  return Number.isFinite(n) && n > 0 ? n : 0
 }
 
-// ─── Per-category products (for virtual catalog) ─────────────
+function paginate<T>(
+  items: T[],
+  first: number,
+  after?: string | null,
+): {
+  products: T[]
+  totalCount: number
+  pageInfo: { hasNextPage: boolean; endCursor: string | null }
+} {
+  const start = parseCursor(after)
+  const slice = items.slice(start, start + first)
+  const end = start + slice.length
+  const hasNextPage = end < items.length
+  return {
+    products: slice,
+    totalCount: items.length,
+    pageInfo: { hasNextPage, endCursor: hasNextPage ? String(end) : null },
+  }
+}
+
+// ─── Per-category products (for virtual catalog) ─────────────────
 
 export async function getCategoryProducts(
   categorySlug: string,
@@ -107,80 +76,31 @@ export async function getCategoryProducts(
   after?: string | null,
   locale?: string,
 ): Promise<{
-  products: import('./types').Product[]
+  products: Product[]
   totalCount: number
   pageInfo: { hasNextPage: boolean; endCursor: string | null }
 }> {
-  const map = await getCategoryMap()
-  const catId = map[categorySlug]
-  if (!catId) throw new Error(`Category "${categorySlug}" not found`)
-
-  const data = await gql<{
-    products: {
-      edges: Array<{ cursor: string; node: SaleorProduct }>
-      totalCount: number
-      pageInfo: { hasNextPage: boolean; endCursor: string | null }
-    }
-  }>(
-    `query CategoryProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput) {
-      products(first: $first, after: $after, filter: $filter, channel: $channel) {
-        edges { cursor node { ${PRODUCT_FRAGMENT} } }
-        totalCount
-        pageInfo { hasNextPage endCursor }
-      }
-    }`,
-    { channel: getChannelSlug(locale), first, after: after || null, filter: { categories: [catId] } }
-  )
-
-  return {
-    products: data.products.edges.map(e => mapProduct(e.node)),
-    totalCount: data.products.totalCount,
-    pageInfo: data.products.pageInfo,
-  }
+  const items = data.products
+    .filter(p => p.categoryKey === categorySlug)
+    .map(p => toProduct(p, locale))
+  return paginate(items, first, after)
 }
 
-// ─── Category counts ───────────────────────────────────────────
+// ─── Category counts ─────────────────────────────────────────────
 
-export async function getCategoryCounts(locale?: string): Promise<Record<string, number>> {
-  const data = await gql<{
-    categories: {
-      edges: Array<{
-        node: {
-          slug: string
-          products: { totalCount: number } | null
-        }
-      }>
-    }
-  }>(
-    `query($channel: String!) {
-      categories(first: 20) {
-        edges {
-          node {
-            slug
-            products(channel: $channel) { totalCount }
-          }
-        }
-      }
-    }`,
-    { channel: getChannelSlug(locale) }
-  )
-
+export async function getCategoryCounts(_locale?: string): Promise<Record<string, number>> {
   const counts: Record<string, number> = {}
-  for (const { node } of data.categories.edges) {
-    counts[node.slug] = node.products?.totalCount ?? 0
+  for (const p of data.products) {
+    counts[p.categoryKey] = (counts[p.categoryKey] || 0) + 1
   }
   return counts
 }
 
-export async function getTotalProductCount(locale?: string): Promise<number> {
-  const data = await gql<{ products: { totalCount: number } }>(
-    `query($channel: String!) { products(channel: $channel) { totalCount } }`,
-    { channel: getChannelSlug(locale) }
-  )
-  return data.products.totalCount
+export async function getTotalProductCount(_locale?: string): Promise<number> {
+  return data.products.length
 }
 
-// ─── Paginated products ────────────────────────────────────────
+// ─── Paginated / filtered / sorted products ──────────────────────
 
 export async function getProducts(
   first: number,
@@ -190,224 +110,73 @@ export async function getProducts(
   search?: string | null,
   locale?: string,
 ): Promise<{
-  products: import('./types').Product[]
+  products: Product[]
   totalCount: number
   pageInfo: { hasNextPage: boolean; endCursor: string | null }
 }> {
-  const vars: Record<string, unknown> = { channel: getChannelSlug(locale), first, after: after || null }
+  let items = [...data.products]
 
-  const map = await getCategoryMap()
-  const filter: Record<string, unknown> = {}
   if (category) {
-    const catId = map[category]
-    if (catId) filter.categories = [catId]
-  } else {
-    const catIds = Object.entries(map)
-      .filter(([slug]) => slug !== 'builds')
-      .map(([, id]) => id)
-    filter.categories = catIds
+    items = items.filter(p => p.categoryKey === category)
   }
-  const term = search?.trim()
-  if (term) filter.search = term
-  if (Object.keys(filter).length > 0) vars.filter = filter
 
-  if (sort === 'price-asc') vars.sortBy = { field: 'PRICE', direction: 'ASC' }
-  else if (sort === 'price-desc') vars.sortBy = { field: 'PRICE', direction: 'DESC' }
-
-  const data = await gql<{
-    products: {
-      edges: Array<{ cursor: string; node: SaleorProduct }>
-      totalCount: number
-      pageInfo: { hasNextPage: boolean; endCursor: string | null }
-    }
-  }>(
-    `query Products($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput, $sortBy: ProductOrder) {
-      products(first: $first, after: $after, filter: $filter, sortBy: $sortBy, channel: $channel) {
-        edges { cursor node { ${PRODUCT_FRAGMENT} } }
-        totalCount
-        pageInfo { hasNextPage endCursor }
-      }
-    }`,
-    vars,
-  )
-
-  return {
-    products: data.products.edges.map(e => mapProduct(e.node)),
-    totalCount: data.products.totalCount,
-    pageInfo: data.products.pageInfo,
+  const term = search?.trim().toLowerCase()
+  if (term) {
+    items = items.filter(p => p.name.toLowerCase().includes(term))
   }
+
+  if (sort === 'price-asc') {
+    items.sort((a, b) => a.price - b.price)
+  } else if (sort === 'price-desc') {
+    items.sort((a, b) => b.price - a.price)
+  }
+
+  return paginate(items.map(p => toProduct(p, locale)), first, after)
 }
 
-// ─── Popular products ──────────────────────────────────────────
+// ─── Popular products (one per category) ─────────────────────────
 
-export async function getPopularProducts(locale?: string): Promise<import('./types').Product[]> {
-  const channel = getChannelSlug(locale)
-  try {
-    const ordersData = await gql<{
-      orders: {
-        edges: Array<{
-          node: {
-            lines: Array<{
-              variant: { product: { id: string } } | null
-              quantity: number
-            }>
-          }
-        }>
-      }
-    }>(
-      `query($channel: String!) {
-        orders(first: 50, filter: { status: [FULFILLED, PARTIALLY_FULFILLED] }, channel: $channel) {
-          edges { node { lines { variant { product { id } } quantity } } }
-        }
-      }`,
-      { channel }
-    )
-
-    const orderLines = ordersData.orders.edges.flatMap(e => e.node.lines).filter(l => l.variant)
-    if (orderLines.length) {
-      const counts: Record<string, number> = {}
-      for (const line of orderLines) {
-        const pid = line.variant!.product.id
-        counts[pid] = (counts[pid] || 0) + line.quantity
-      }
-      const topIds = Object.entries(counts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 6)
-        .map(([id]) => id)
-
-      const idSet = new Set(topIds)
-      const allData = await gql<{
-        products: { edges: Array<{ node: SaleorProduct }> }
-      }>(
-        `query($channel: String!, $first: Int!) {
-          products(first: $first, channel: $channel) {
-            edges { node { ${PRODUCT_FRAGMENT} } }
-          }
-        }`,
-        { channel, first: 50 }
-      )
-
-      const mapped: import('./types').Product[] = []
-      for (const id of topIds) {
-        const found = allData.products.edges.find(e => e.node.id === id)
-        if (found) mapped.push(mapProduct(found.node))
-      }
-      if (mapped.length) return mapped
-    }
-  } catch {
-    // No orders or query failed — fallback to per-category selection
+export async function getPopularProducts(locale?: string): Promise<Product[]> {
+  const seen = new Set<string>()
+  const result: Product[] = []
+  for (const p of data.products) {
+    if (seen.has(p.categoryKey)) continue
+    seen.add(p.categoryKey)
+    result.push(toProduct(p, locale))
+    if (result.length >= 6) break
   }
-
-  try {
-    const catMap = await getCategoryMap()
-    const catSlugs = Object.keys(catMap)
-
-    const perCatProms = catSlugs.slice(0, 6).map(catSlug =>
-      gql<{ products: { edges: Array<{ node: SaleorProduct }> } }>(
-        `query($channel: String!, $catId: ID!) {
-          products(first: 1, filter: { categories: [$catId] }, channel: $channel) {
-            edges { node { ${PRODUCT_FRAGMENT} } }
-          }
-        }`,
-        { channel, catId: catMap[catSlug] }
-      ).then(d => d.products.edges[0]?.node)
-    )
-
-    const fromEachCat = (await Promise.all(perCatProms)).filter(Boolean) as SaleorProduct[]
-    const result = fromEachCat.slice(0, 6)
-
-    if (result.length >= 6) return result.map(mapProduct)
-
-    const existingIds = new Set(result.map(p => p.id))
-    const needed = 6 - result.length
-    const fillData = await gql<{ products: { edges: Array<{ node: SaleorProduct }> } }>(
-      `query($channel: String!, $first: Int!) {
-        products(first: $first, channel: $channel) {
-          edges { node { ${PRODUCT_FRAGMENT} } }
-        }
-      }`,
-      { channel, first: needed + 5 }
-    )
-    const fill = fillData.products.edges
-      .map(e => e.node)
-      .filter(p => !existingIds.has(p.id))
-      .slice(0, needed)
-
-    return [...result, ...fill].map(mapProduct)
-  } catch {
-    throw new Error('Saleor is unavailable')
-  }
+  return result
 }
 
-// ─── Builds ────────────────────────────────────────────────
+// ─── Exchange rate (RUB → USD for cart conversions) ──────────────
 
-export async function getBuilds(locale?: string): Promise<import('./types').Build[]> {
-  const catMap = await getCategoryMap()
-  const buildsCatId = catMap['builds']
-  if (!buildsCatId) throw new Error('Builds category not found')
+export async function getExchangeRate(): Promise<number> {
+  return RUB_USD_RATE
+}
 
-  const buildData = await gql<{
-    products: { edges: Array<{ node: SaleorProduct }> }
-  }>(
-    `query($catId: ID!, $first: Int!) {
-      products(first: $first, filter: { categories: [$catId] }) {
-        edges { node { ${PRODUCT_FRAGMENT} } }
-      }
-    }`,
-    { catId: buildsCatId, first: 20 }
-  )
+// ─── Builds ──────────────────────────────────────────────────────
 
-  const buildNodes: Array<{ node: SaleorProduct; componentSlugs: string[] }> = []
-
-  for (const { node } of buildData.products.edges) {
-    const slugs = node.attributes
-      .filter(a => a.values?.length)
-      .map(a => a.values[0].name)
-    buildNodes.push({ node, componentSlugs: slugs })
+export async function getBuilds(locale?: string): Promise<Build[]> {
+  const byId = new Map<number, Product>()
+  for (const p of data.products) {
+    byId.set(p.id, toProduct(p, locale))
   }
 
-  if (buildNodes.length === 0) return []
-
-  const allProducts = await gql<{
-    products: { edges: Array<{ node: SaleorProduct }> }
-  }>(
-    `query($first: Int!, $channel: String!) {
-      products(first: $first, channel: $channel) {
-        edges { node { ${PRODUCT_FRAGMENT} } }
-      }
-    }`,
-    { first: 100, channel: getChannelSlug(locale) }
-  )
-
-  const productBySlug = new Map<string, import('./types').Product>()
-  for (const { node } of allProducts.products.edges) {
-    productBySlug.set(node.slug, mapProduct(node))
-  }
-
-  const result: import('./types').Build[] = []
-
-  for (const { node } of buildNodes) {
-    const components: import('./types').BuildComponent[] = []
-
-    for (const attr of node.attributes) {
-      if (!attr.values?.length) continue
-      const productSlug = attr.values[0].name
-      const product = productBySlug.get(productSlug)
-      if (product) {
-        components.push({ role: attr.attribute.slug, product })
-      }
+  const result: Build[] = []
+  for (const b of data.builds) {
+    const components: BuildComponent[] = []
+    for (const comp of b.components) {
+      const product = byId.get(comp.productId)
+      if (product) components.push({ role: comp.role, product })
     }
-
     const totalPrice = components.reduce((sum, c) => sum + c.product.price, 0)
-
     result.push({
-      id: parseIdFromSlug(node.slug),
-      name: node.name,
-      slug: node.slug,
+      id: b.id,
+      name: b.name,
+      slug: b.slug,
       totalPrice,
       components,
     })
   }
-
   return result
 }

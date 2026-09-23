@@ -21,6 +21,10 @@ export function PopularProducts() {
 
   useEffect(() => {
     let cancelled = false
+    setProducts([])
+    setConnecting(true)
+    retryCountRef.current = 0
+    loadingRef.current = false
 
     async function load() {
       if (loadingRef.current) return
@@ -60,7 +64,7 @@ export function PopularProducts() {
       cancelled = true
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [])
+  }, [locale])
 
   if (connecting) {
     return (

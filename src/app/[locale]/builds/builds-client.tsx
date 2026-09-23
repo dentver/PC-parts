@@ -11,7 +11,7 @@ import type { Build } from '@/data/types'
 import cardStyles from '@/app/[locale]/catalog/catalog.module.scss'
 import styles from './builds.module.scss'
 
-let cachedBuilds: Build[] | null = null
+const buildCache: Record<string, Build[]> = {}
 
 export function BuildsClient() {
   const t = useTranslations()
@@ -19,9 +19,9 @@ export function BuildsClient() {
   const { showSnackbar } = useSnackbar()
   const params = useParams()
   const locale = (params.locale as string) || 'en'
-  const [builds, setBuilds] = useState<Build[]>(cachedBuilds ?? [])
+  const [builds, setBuilds] = useState<Build[]>(buildCache[locale] ?? [])
   const [selected, setSelected] = useState<Build | null>(null)
-  const [loading, setLoading] = useState(!cachedBuilds)
+  const [loading, setLoading] = useState(!buildCache[locale])
 
   useEffect(() => {
     if (selected) {
@@ -33,12 +33,24 @@ export function BuildsClient() {
   }, [selected])
 
   useEffect(() => {
-    if (cachedBuilds) return
+    setSelected(null)
+    if (buildCache[locale]) {
+      setBuilds(buildCache[locale])
+      setLoading(false)
+      return
+    }
+    let cancelled = false
     fetch(`/api/builds?locale=${locale}`)
       .then(r => r.ok ? r.json() : [])
-      .then(data => { cachedBuilds = data; setBuilds(data); setLoading(false) })
-      .catch(() => setLoading(false))
-  }, [])
+      .then(data => {
+        if (cancelled) return
+        buildCache[locale] = data
+        setBuilds(data)
+        setLoading(false)
+      })
+      .catch(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [locale])
 
   if (loading) {
     return (

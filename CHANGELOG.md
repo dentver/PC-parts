@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 — 2026-08-13
+
+### Fixed
+
+- Prices now actually change when switching language: popular products, builds and compare refetch data for the new locale's currency channel instead of re-formatting stale RUB/USD values
+- Cart prices are converted to the current locale's currency on switch (rate derived from Saleor channel prices via new `/api/rate`); cart items are tagged with the currency they were stored in
+
 ## 0.2.0 — 2026-07-23
 
 ### Added

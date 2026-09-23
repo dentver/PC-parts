@@ -87,7 +87,7 @@ export function CompareClient() {
     setProduct1(null)
     setProduct2(null)
     setOverlayOpen(false)
-  }, [activeCategory])
+  }, [activeCategory, locale])
 
   const openOverlay = useCallback(
     async (target: 1 | 2) => {
